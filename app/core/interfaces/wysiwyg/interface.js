@@ -80,7 +80,7 @@ define(['core/UIView', 'core/interfaces/wysiwyg/vendor/medium-editor.min'], func
         value: value,
         name: this.name,
         widthClass: getWidthClass(buttonsLength),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         simple_editor: (this.options.settings && this.options.settings.get('simple_editor') === true)
       };
 

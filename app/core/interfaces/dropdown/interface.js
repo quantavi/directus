@@ -56,7 +56,7 @@ define([
         readonly: !this.options.canWrite,
         showSelectOption: hasPlaceHolder || this.columnSchema.isNullable(),
         placeholder: placeholder,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         native: Boolean(Number(this.options.settings.get('use_native_input'))),
         value: value
       };

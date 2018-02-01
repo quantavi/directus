@@ -56,7 +56,7 @@ define(['core/UIView', './lib/text-scrambler'], function (UIView, TextScrambler)
         value: value,
         name: this.options.name,
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         hide: this.options.settings.get('hide_value'),
         placeholder: (this.options.settings) ? this.options.settings.get('placeholder') : ''
       };

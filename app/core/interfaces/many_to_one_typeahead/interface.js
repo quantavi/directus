@@ -40,7 +40,7 @@ define(['app', 'handlebars', 'core/UIView', 'utils'], function (app, Handlebars,
       return {
         name: this.options.name,
         size: this.columnSchema.options.get('size'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         disabled: !this.visibleColumn,
         selectedItem: relatedModel,
         hasSelectedItem: !relatedModel.isNew(),

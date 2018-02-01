@@ -30,7 +30,7 @@ define(['core/UIView'], function (UIView) {
         rows: this.options.settings.get('rows'),
         placeholder: this.options.settings.get('placeholder'),
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only']
       };
     }
   });

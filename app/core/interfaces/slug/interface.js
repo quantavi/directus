@@ -26,7 +26,8 @@ define(function (require, exports, module) {
         readOnly:
           (onlyOnCreation === true && isNew === false) ||
           this.options.settings.get('read_only') ||
-          (this.options.canWrite === false)
+          (this.options.canWrite === false) || 
+          jsSM[(status = this.options.model.attributes.status)?status:0]['read_only']
       };
     },
 

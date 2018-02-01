@@ -55,7 +55,7 @@ define([
         name: this.options.name,
         rows: this.options.settings.get('rows'),
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         always_show_preview: this.options.settings.get('always_show_preview')
       };
     }

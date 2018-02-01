@@ -622,13 +622,24 @@ foreach ($config['statusMapping'] as $key => $status) {
     $mapping[] = $status;
 }
 
+// status mapping for js
+foreach ( $mapping as $k => $v ) {
+    $tmp = [
+        'id' => $v['id'],
+        'read_only' => $v['read_only']
+    ];
+    $jsStatusMapping[$k] = $tmp;
+}
+
+echo '<script>var jsSM = '.json_encode($jsStatusMapping).'</script>';
+
+
 $statusMappingConfiguration = [
     'mapping' => $mapping,
     'status_name' => STATUS_COLUMN_NAME,
     'default_value' => STATUS_DRAFT_NUM,
     'delete_value' => STATUS_DELETED_NUM
 ];
-
 
 $statusMapping = [
     '*' => $statusMappingConfiguration
@@ -640,6 +651,9 @@ $statusMapping['directus_users'] = array_replace_recursive($statusMappingConfigu
         2 => ['name' => __t('Inactive')]
     ]
 ]);
+
+// Remove unnecessary status OR in other words: return only Deleted, Active and Inactive
+$statusMapping['directus_users']['mapping'] = array_splice( $statusMapping['directus_users']['mapping'], 0, 3 );
 
 foreach ($allTables as $table) {
     $tableName = \Directus\Util\ArrayUtils::get($table, 'schema.id');
