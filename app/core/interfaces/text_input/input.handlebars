@@ -7,11 +7,23 @@
 	.char-count.hide {
 		opacity: 0;
 	}
+	
+	.caps-warn {
+		margin-top: 1em;
+		color: rgba(0, 0, 0, 0.4);
+		font-style: italic;
+		transition: opacity 200ms ease-in-out 0ms;
+	}
+	
+	.caps-warn.hide {
+		opacity: 0;
+	}
 </style>
 
 <div class="char-count-container {{size}}">
 	<input {{#if autoSize}}style="width: {{maxLength}}ch;"{{/if}} type="text" placeholder="{{placeholder}}" value="{{value}}" name="{{name}}" id="{{name}}" maxLength="{{maxLength}}" class="{{size}}" {{#if readOnly}}readonly{{/if}}/>
 	{{#if showCharacterCount}}
 	<span class="char-count hide">{{charsLeft}}</span>
+	<div class="caps-warn hide">Use ALL CAPS only for acronyms</div>
 	{{/if}}
 </div>

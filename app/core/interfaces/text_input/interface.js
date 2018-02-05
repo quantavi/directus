@@ -49,6 +49,7 @@ define(['core/UIView'], function (UIView) {
      */
     toggleHideClass: function () {
       this.$el.find('.char-count').toggleClass('hide');
+      //this.$el.find('.caps-warn').toggleClass('hide');
     },
 
     /**
@@ -75,6 +76,17 @@ define(['core/UIView'], function (UIView) {
         var charsLeft = maxLength - $input.val().length;
         this.$el.find('.char-count').html(charsLeft);
       }
+      
+      // Check for UpperCase characters
+      // If there are ONLY UpperCase characters, show warning
+      if ( /[A-Z]+[^a-z]/.test($input.val()) ) {
+    	this.$el.find('.caps-warn').removeClass('hide');
+	  }
+      
+      // Hide warning if input is empty
+	  if ( charsLeft == maxLength ) {
+	   	this.$el.find('.caps-warn').addClass('hide');
+	  }
     },
 
     /**
