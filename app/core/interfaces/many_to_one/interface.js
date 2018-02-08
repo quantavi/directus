@@ -151,7 +151,7 @@ define([
         allowNull: this.options.settings.get('allow_null') === true,
         placeholder: this.options.settings.get('placeholder'),
         placeholderAvailable: placeholderAvailable,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         value: this.value,
         required: this.options.schema.isRequired()
       };

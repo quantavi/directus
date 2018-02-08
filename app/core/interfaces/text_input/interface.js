@@ -16,6 +16,7 @@ define(['core/UIView'], function (UIView) {
      * @return {Object} Locals for Handlebars template
      */
     serialize: function () {
+    	
       var schema = this.options.schema;
       var settings = this.options.settings;
 
@@ -26,10 +27,10 @@ define(['core/UIView'], function (UIView) {
       var autoSize = settings.get('size') === 'auto';
       var charsLeft = length - value.toString().length;
       var placeholder = settings.get('placeholder') || '';
-      var readOnly = settings.get('read_only') || !this.options.canWrite;
+      var readOnly = settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'];
       var showCharacterCount = this.options.schema.get('length');
       var size = settings.get('size');
-
+     
       return {
         autoSize: autoSize,
         charsLeft: charsLeft,
@@ -48,6 +49,7 @@ define(['core/UIView'], function (UIView) {
      */
     toggleHideClass: function () {
       this.$el.find('.char-count').toggleClass('hide');
+      //this.$el.find('.caps-warn').toggleClass('hide');
     },
 
     /**
@@ -74,6 +76,17 @@ define(['core/UIView'], function (UIView) {
         var charsLeft = maxLength - $input.val().length;
         this.$el.find('.char-count').html(charsLeft);
       }
+      
+      // Check for UpperCase characters
+      // If there are ONLY UpperCase characters, show warning
+      if ( /[A-Z]+[^a-z]/.test($input.val()) ) {
+    	this.$el.find('.caps-warn').removeClass('hide');
+	  }
+      
+      // Hide warning if input is empty
+	  if ( charsLeft == maxLength ) {
+	   	this.$el.find('.caps-warn').addClass('hide');
+	  }
     },
 
     /**

@@ -54,4 +54,6 @@
 		width: 100%;
 	}
 </style>
+{{#unless readOnly}}
 <textarea name="{{name}}" id="wysiwyg_{{name}}" {{#if readOnly}}readonly{{/if}}>{{value}}</textarea>
+{{/unless}}

@@ -199,9 +199,9 @@ define([
       return {
         name: this.name,
         tableTitle: this.relatedCollection.table.get('table_name'),
-        canEdit: this.canEdit,
-        showChooseButton: this.showChooseButton,
-        showAddButton: this.showAddButton && relatedTablePrivilege.canAdd()
+        canEdit: this.canEdit || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
+        showChooseButton: this.showChooseButton || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
+        showAddButton: this.showAddButton && relatedTablePrivilege.canAdd() || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only']
       };
     },
 

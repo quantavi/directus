@@ -80,7 +80,7 @@ define([
       return {
         value: this.getTagsValue(),
         name: this.options.name,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         tags: this.tags,
         comment: this.options.schema.get('comment')
       };

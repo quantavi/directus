@@ -16,7 +16,7 @@ define([
 
       return {
         value: value,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         name: this.options.name
       };
     },
@@ -31,7 +31,7 @@ define([
       var blocks = getCheckboxesSettings('blocks');
       var alignment = getCheckboxesSettings('alignment');
       var toolbarOptions = getCheckboxesSettings('toolbar_options');
-      var toolbar;
+      var toolbar = '';
 
       function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -87,7 +87,9 @@ define([
         });
       }
 
-      toolbar = (styleFormats.length > 0 ? 'styleselect ' : '');
+      if  (styleFormats.length > 0 && this.options.settings.get('show_format_menu')) {
+        toolbar = 'styleselect ';
+      }
 
       if (toolbarOptions.length > 0) {
         // Convert inline / alignment to appropriate options & add to toolbar

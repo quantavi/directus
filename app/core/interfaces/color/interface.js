@@ -200,7 +200,7 @@ define(['underscore', 'core/UIView', 'core/t', 'core/interfaces/color/lib/color'
         name: this.options.name,
         comment: this.options.schema.get('comment'),
         palette: userPalette.length ? userPalette.split(',') : false,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         input: input,
         output: this.options.settings.get('output'),
         hex: input === 'hex',
