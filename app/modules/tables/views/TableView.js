@@ -271,7 +271,7 @@ define([
           showMoreButton: !! _.result(this, 'rightPane')
         });
       }
-
+      
       return this.state.views[viewId];
     },
 
