@@ -138,7 +138,7 @@ function(app, Backbone, _, Sortable, Notification) {
     	  // This is sensive/fragile element, because the last part of path("row.model.attributes.*")
     	  // depends on column name. 
     	  // So, every table need to have at least one same name column, and last part of path must be the same.
-    	  let cid = row.model.attributes.tworca;
+    	  let cid = row.model.attributes.maker;
     	  	
     	  function isInGroup() {
       		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
@@ -154,7 +154,6 @@ function(app, Backbone, _, Sortable, Notification) {
     		  prohibited++;
     	  }
     	  
-//    	  console.log( "Creator(" + cid + ") in Current Group: " + isInGroup() );
       });
       
       this.collection.prohibited = prohibited;
