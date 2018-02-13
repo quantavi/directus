@@ -384,7 +384,7 @@ define([
     },
 
     serialize: function () {
-      var data = {resultCount: this.collection.length};
+      var data = {resultCount: this.collection.length - this.collection.prohibited};
       var structure = this.collection.structure;
       var table = this.collection.getTable();
       var statusColumnName = table.getStatusColumnName();

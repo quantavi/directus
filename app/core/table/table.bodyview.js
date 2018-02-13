@@ -130,7 +130,34 @@ function(app, Backbone, _, Sortable, Notification) {
       var blacklist = this.options.blacklist;
 
       tableData.columns = _.difference(tableData.columns, blacklist);
-
+      
+      let prohibited = 0;
+      
+      tableData.rows.forEach( function( row ) {
+    	  // !WARNING! 
+    	  // This is sensive/fragile element, because the last part of path("row.model.attributes.*")
+    	  // depends on column name. 
+    	  // So, every table need to have at least one same name column, and last part of path must be the same.
+    	  let cid = row.model.attributes.maker;
+    	  	
+    	  function isInGroup() {
+      		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
+      			  if ( cid == userid || app.users.getCurrentUser().attributes.group.id == 1 ) {
+      				  return true;
+      			  }
+      		  }
+      		  return false;
+      	  }
+    	  
+    	  if ( !isInGroup() ) {
+    		  tableData.rows.splice( tableData.rows.indexOf( row ), 1 );
+    		  prohibited++;
+    	  }
+    	  
+      });
+      
+      this.collection.prohibited = prohibited;
+      
       return tableData;
     },
 
