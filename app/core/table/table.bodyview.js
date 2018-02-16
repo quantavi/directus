@@ -133,12 +133,32 @@ function(app, Backbone, _, Sortable, Notification) {
       
       let prohibited = 0;
       
+      for ( let i = 0; i < tableData.rows.length; i++ ) {
+    	  let cid = tableData.rows[i].model.attributes.user_created;
+  	  	
+    	  function isInGroup() {
+      		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
+      			  if ( cid == userid || app.users.getCurrentUser().attributes.group.id == 1 ) {
+      				  return true;
+      			  }
+      		  }
+      		  return false;
+      	  }
+    	  
+    	  if ( !isInGroup() ) {
+    		  tableData.rows.splice( tableData.rows.indexOf( tableData.rows[i] ), 1 );
+    		  prohibited++;
+    	  }
+    	  
+    	  console.log( "Creator(" + cid + ") in Current Group: " + isInGroup() );
+      }
+      /*
       tableData.rows.forEach( function( row ) {
     	  // !WARNING! 
     	  // This is sensive/fragile element, because the last part of path("row.model.attributes.*")
     	  // depends on column name. 
     	  // So, every table need to have at least one same name column, and last part of path must be the same.
-    	  let cid = row.model.attributes.tworca;
+    	  let cid = row.model.attributes.user_created;
     	  	
     	  function isInGroup() {
       		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
@@ -154,9 +174,9 @@ function(app, Backbone, _, Sortable, Notification) {
     		  prohibited++;
     	  }
     	  
-//    	  console.log( "Creator(" + cid + ") in Current Group: " + isInGroup() );
+    	  console.log( "Creator(" + cid + ") in Current Group: " + isInGroup() );
       });
-      
+      */
       this.collection.prohibited = prohibited;
       
       return tableData;
