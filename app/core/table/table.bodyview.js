@@ -130,55 +130,68 @@ function(app, Backbone, _, Sortable, Notification) {
       var blacklist = this.options.blacklist;
 
       tableData.columns = _.difference(tableData.columns, blacklist);
+// ===========================START===========================
+      var prohibited = 0;
       
-      let prohibited = 0;
+//      	console.log( app.users.getCurrentUser().getGroup() );
       
-      for ( let i = 0; i < tableData.rows.length; i++ ) {
-    	  let cid = tableData.rows[i].model.attributes.user_created;
-  	  	
-    	  function isInGroup() {
-      		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
-      			  if ( cid == userid || app.users.getCurrentUser().attributes.group.id == 1 ) {
-      				  return true;
-      			  }
-      		  }
-      		  return false;
-      	  }
+      var currentUser = app.users.getCurrentUser();
+      var currentUserGroupID = currentUser.getGroup().id;
+      
+      if ( currentUser.attributes.group.isAdmin() ) {
     	  
-    	  if ( !isInGroup() ) {
-    		  tableData.rows.splice( tableData.rows.indexOf( tableData.rows[i] ), 1 );
-    		  prohibited++;
+    	  console.log( "User in Admin group!" );
+    	  
+      } else {
+    	  
+    	  console.log( "User in Public group!" );
+//    	  console.log( tableData.rows );
+    	  
+    	  let rows = tableData.rows;
+    	  
+    	  for ( let i = 0; i < rows.length; i++ ) {
+    		  
+    		  let row = rows[i];
+    		  let itemCreatorID = row.model.attributes.user_created;
+    		  let currentActiveGroup = app.groups._byId;
+//    		  let itemCreatorGroupID = row.model.privileges.attributes.group_id; // Grupa aktualnie zalogowanego
+    		  
+//    		  console.log( row );
+//    		  console.log( "ID Grupy, której członek utworzył item " + row.index + " to " + itemCreatorGroupID );
+//    		  console.log( currentActiveGroup );
+    		  
+    		  let flag = false;
+    		  
+    		  for ( let user in currentActiveGroup ) {
+    			  
+    			  console.log( "User: " + user );
+    			  console.log( "Item Creator ID: " + itemCreatorID );
+    			  
+    			  if ( itemCreatorID == user ) {
+    				  
+    				  console.log( "User " + itemCreatorID + " jest w grupie z " + currentUser.id );
+    				  flag = true;
+    				  
+    			  }
+    			  
+    		  }
+    		  
+    		  if ( !flag ) {
+    			  
+    			  console.log( "User " + itemCreatorID + " nie jest w grupie z " + currentUser.id );
+    			  console.log( "Usuwam item nr " + row.index );
+    			  
+    			  rows.splice( rows.indexOf( row ), 1 );
+    			  prohibited++;
+    			  
+    		  }
+    		  
     	  }
     	  
-    	  console.log( "Creator(" + cid + ") in Current Group: " + isInGroup() );
       }
-      /*
-      tableData.rows.forEach( function( row ) {
-    	  // !WARNING! 
-    	  // This is sensive/fragile element, because the last part of path("row.model.attributes.*")
-    	  // depends on column name. 
-    	  // So, every table need to have at least one same name column, and last part of path must be the same.
-    	  let cid = row.model.attributes.user_created;
-    	  	
-    	  function isInGroup() {
-      		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
-      			  if ( cid == userid || app.users.getCurrentUser().attributes.group.id == 1 ) {
-      				  return true;
-      			  }
-      		  }
-      		  return false;
-      	  }
-    	  
-    	  if ( !isInGroup() ) {
-    		  tableData.rows.splice( tableData.rows.indexOf( row ), 1 );
-    		  prohibited++;
-    	  }
-    	  
-    	  console.log( "Creator(" + cid + ") in Current Group: " + isInGroup() );
-      });
-      */
-      this.collection.prohibited = prohibited;
       
+      this.collection.prohibited = prohibited;
+// ===========================STOP============================
       return tableData;
     },
 

@@ -1,0 +1,162 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "cropperjs",
+        "scope": null,
+        "escapedName": "cropperjs",
+        "name": "cropperjs",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/var/www/html"
+    ]
+  ],
+  "_from": "cropperjs@latest",
+  "_id": "cropperjs@1.3.0",
+  "_inCache": true,
+  "_location": "/cropperjs",
+  "_nodeVersion": "9.6.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cropperjs_1.3.0_1519547406860_0.5955877057033432"
+  },
+  "_npmUser": {
+    "name": "fengyuanchen",
+    "email": "chenfengyuan@outlook.com"
+  },
+  "_npmVersion": "5.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cropperjs",
+    "scope": null,
+    "escapedName": "cropperjs",
+    "name": "cropperjs",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cropperjs/-/cropperjs-1.3.0.tgz",
+  "_shasum": "566e60a1f39eb722074604f75c9c3ac315bf4ebd",
+  "_shrinkwrap": null,
+  "_spec": "cropperjs",
+  "_where": "/var/www/html",
+  "author": {
+    "name": "Chen Fengyuan",
+    "url": "http://chenfengyuan.com"
+  },
+  "browser": "dist/cropper.js",
+  "bugs": {
+    "url": "https://github.com/fengyuanchen/cropperjs/issues"
+  },
+  "dependencies": {},
+  "description": "JavaScript image cropper.",
+  "devDependencies": {
+    "@commitlint/cli": "^6.1.2",
+    "@commitlint/config-angular": "^6.1.2",
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "cpy-cli": "^1.0.1",
+    "cssnano": "^3.10.0",
+    "del-cli": "^1.1.0",
+    "eslint": "^4.18.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "husky": "^0.14.3",
+    "karma": "^2.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-rollup-preprocessor": "^5.1.1",
+    "mocha": "^5.0.1",
+    "npm-run-all": "^4.1.2",
+    "postcss-cli": "^5.0.0",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-header": "^1.0.0",
+    "postcss-import": "^11.1.0",
+    "postcss-url": "^7.3.0",
+    "prettier": "^1.10.2",
+    "puppeteer": "^1.1.1",
+    "rollup": "^0.56.2",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-watch": "^4.3.1",
+    "stylefmt": "^6.0.0",
+    "uglify-js": "^3.3.12"
+  },
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-vwTWGJQqhPzKBKgtI3Rg/q65goMzk6hPHNMp9VFrKHN2u8HRU8wy/zOfj0cW97ofI/dSLqwddDFowHij9Hfwqg==",
+    "shasum": "566e60a1f39eb722074604f75c9c3ac315bf4ebd",
+    "tarball": "https://registry.npmjs.org/cropperjs/-/cropperjs-1.3.0.tgz",
+    "fileCount": 26,
+    "unpackedSize": 495113
+  },
+  "files": [
+    "src",
+    "dist",
+    "types"
+  ],
+  "gitHead": "ae88c171e8e65bdc425e10827f12ccaed92f2b6c",
+  "homepage": "https://fengyuanchen.github.io/cropperjs",
+  "keywords": [
+    "image",
+    "crop",
+    "move",
+    "zoom",
+    "rotate",
+    "scale",
+    "cropper",
+    "cropper.js",
+    "cropping",
+    "processing",
+    "html",
+    "css",
+    "javascript",
+    "front-end",
+    "web",
+    "development"
+  ],
+  "license": "MIT",
+  "main": "dist/cropper.common.js",
+  "maintainers": [
+    {
+      "name": "fengyuanchen",
+      "email": "cfy.org@gmail.com"
+    }
+  ],
+  "module": "dist/cropper.esm.js",
+  "name": "cropperjs",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengyuanchen/cropperjs.git"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "postcss src/index.css -o dist/cropper.css --no-map",
+    "build:js": "rollup -c",
+    "clear": "del-cli dist",
+    "commitmsg": "commitlint -e",
+    "compress": "npm run compress:css && npm run compress:js",
+    "compress:css": "postcss dist/cropper.css -u cssnano -o dist/cropper.min.css --no-map",
+    "compress:js": "uglifyjs dist/cropper.js -o dist/cropper.min.js -c -m --comments /^!/",
+    "copy": "cpy dist/cropper.css docs/css",
+    "lint": "eslint src test --fix",
+    "release": "npm run clear && npm run lint && npm run build && npm run compress && npm run copy && npm test",
+    "start": "npm-run-all --parallel watch:*",
+    "test": "karma start test/karma.conf.js",
+    "watch:css": "postcss src/index.css -o docs/css/cropper.css -m -w",
+    "watch:js": "rollup -c -m -w"
+  },
+  "style": "dist/cropper.css",
+  "types": "types/index.d.ts",
+  "version": "1.3.0"
+}

@@ -27,17 +27,68 @@ define([
     // Interface options
     // These are schema structures object
     options: [
-      {
-        id: 'allowed_filetypes',
-        ui: 'text_input',
-        type: 'String',
-        comment: 'What filetypes (mimetypes) to support. Leave empty for all.',
-        default_value: '',
-        char_length: 200,
-        options: {
-          placeholder: 'Allow all filetypes'
-        }
-      }
+		{
+			id: 'allowed_filetypes',
+			ui: 'text_input',
+			type: 'String',
+			comment: 'What filetypes (mimetypes) to support. Leave empty for all.',
+			default_value: '',
+			char_length: 200,
+			options: {
+				placeholder: 'Allow all filetypes'
+			}
+		},
+		{
+			id: 'available_ratios',
+			ui: 'checkboxes',
+			type: 'String',
+			comment: 'Choose ratios that will be available in cropper',
+			default_value: '16.9,4.3,1.1',
+			options: {
+				options: {
+					free: 'Free',
+					16.9: '16:9',
+					4.3: '4:3',
+					3.2: '3:2',
+					1.1: '1:1'					
+				}
+			}
+		},
+		{
+			id: 'allow_shortcuts',
+			ui: 'toggle',
+			type: 'Boolean',
+			comment: 'Are shortcuts available?',
+			default_value: true
+		},
+		{
+			id: 'allow_image_movement',
+			ui: 'toggle',
+			type: 'Boolean',
+			comment: 'Can user move the image?',
+			default_value: true
+		},
+		{
+			id: 'allow_image_rotation',
+			ui: 'toggle',
+			type: 'Boolean',
+			comment: 'Can user rotate the image?',
+			default_value: true
+		},
+		{
+			id: 'allow_image_flipping',
+			ui: 'toggle',
+			type: 'Boolean',
+			comment: 'Can user flip(horizontal and vertical) the image?',
+			default_value: true
+		},
+		{
+			id: 'allow_image_zooming',
+			ui: 'toggle',
+			type: 'Boolean',
+			comment: 'Can user zoom the image?',
+			default_value: true
+		}
     ],
 
     // Interface View
