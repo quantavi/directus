@@ -202,7 +202,8 @@ function(app, Backbone, _, Sortable, Notification) {
     		  }
     		  
     	  }  
-      });
+      	});
+      }
       
       this.collection.prohibited = prohibited;
 // ===========================STOP============================
