@@ -135,6 +135,7 @@ function(app, Backbone, _, Sortable, Notification) {
       
 //      	console.log( app.users.getCurrentUser().getGroup() );
       
+<<<<<<< HEAD
       var currentUser = app.users.getCurrentUser();
       var currentUserGroupID = currentUser.getGroup().id;
       
@@ -146,6 +147,23 @@ function(app, Backbone, _, Sortable, Notification) {
     	  
     	  console.log( "User in Public group!" );
 //    	  console.log( tableData.rows );
+=======
+      tableData.rows.forEach( function( row ) {
+    	  // !WARNING! 
+    	  // This is sensive/fragile element, because the last part of path("row.model.attributes.*")
+    	  // depends on column name. 
+    	  // So, every table need to have at least one same name column, and last part of path must be the same.
+    	  let cid = row.model.attributes.maker;
+    	  	
+    	  function isInGroup() {
+      		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
+      			  if ( cid == userid || app.users.getCurrentUser().attributes.group.id == 1 ) {
+      				  return true;
+      			  }
+      		  }
+      		  return false;
+      	  }
+>>>>>>> 9187e23db7ae0653a577c3e21f5545f4f46106a7
     	  
     	  let rows = tableData.rows;
     	  
@@ -188,7 +206,11 @@ function(app, Backbone, _, Sortable, Notification) {
     		  
     	  }
     	  
+<<<<<<< HEAD
       }
+=======
+      });
+>>>>>>> 9187e23db7ae0653a577c3e21f5545f4f46106a7
       
       this.collection.prohibited = prohibited;
 // ===========================STOP============================
@@ -223,7 +245,7 @@ function(app, Backbone, _, Sortable, Notification) {
         var $el = $(this);
 
         attributes[sortColumnName] = i;
-        collection.get($el.data('cid')).set(attributes, {silent: true});
+        collection.get($el.data('id')).set(attributes, {silent: true});
       });
 
       success = function () {
