@@ -422,7 +422,6 @@
 			margin: 0 0 0.5rem 0.5rem;
 			/*background-color: lightblue;*/
 		}
-		
 			.c-preview-container > .preview {
 				width: 100%;
 				height: 100%;
@@ -436,6 +435,38 @@
 			width: calc( 30% - 0.5rem );
 			margin: 0 0 0.5rem 0.5rem;
 		}
+			.c-options header {
+				color: #3498db;
+				font-weight: bold;
+				text-align: center;
+				text-transform: uppercase;
+			}
+			
+			.c-options ul li {
+				list-style-type: none;
+			}
+			
+			.c-options ul li::after {
+				content: '';
+				display: block;
+				clear: both;
+			}
+				.c-options ul li label {
+					position: relative;
+						top: 10px;
+					padding: 5px;
+				}
+					.c-options ul li input[type="checkbox"] {
+						float: left;
+					}
+				
+				.c-options ul li .c-option-description {
+					padding: 0.2rem;
+					font-size: 0.7rem;
+					font-style: italic;
+					text-align: left;
+				}
+			
 		
 		.shortcuts {
 			position: relative;
@@ -469,7 +500,7 @@
 		<ul>
 			<li>
 				<label><input id="enable_origin_mirroring" type="checkbox">Origin Mirroring</label>
-				<p class="c-option-description">Duplicate crop tool position to other resolutions</p>
+				<p class="c-option-description">Copy the position of the tool to other resolutions</p>
 			</li>
 		</ul>
 	</div>

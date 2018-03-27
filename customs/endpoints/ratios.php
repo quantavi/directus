@@ -14,18 +14,6 @@ use Directus\Filesystem\Files as Files;
 // Slim App
 $app = Bootstrap::get('app');
 
-// Simple POST endpoint example
-
-/* $app->post('/ratios/:test', function ($test = null) {
-    $time = new DateTime();
-    $format = 'Y-m-d H:i:s';
-    return JsonView::render([
-        'date_time' => $time->format($format),
-        'test' => $test
-    ]);
-});
- */
-
 $app->post('/ratios', function () {
     // Get all cropped images and save it as PHP object
     $data = json_decode($_POST['data']);
@@ -57,7 +45,6 @@ $app->post('/ratios', function () {
     // TMP -> TEST
     $time = new DateTime();
     $format = 'Y-m-d H:i:s';
-    
 
     // JSON response
     return JsonView::render([

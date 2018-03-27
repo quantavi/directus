@@ -168,6 +168,29 @@ define([
 		return ratios;
     },
     
+    getCrossData: function( dataSource ) {
+    	return {
+    		x: (dataSource.width / 2) + dataSource.left,
+    		y: (dataSource.height / 2) + dataSource.top
+    	}
+    },
+    
+    originMirroring: function(event) {
+    	if ( event.target.checked ) {
+    		cData.globalCrossData = {
+    				data: this.getCrossData( cropper.getCropBoxData() ),
+    				isEnabled: true
+    		};
+    		Notification.info('Cropper', 'Origin Mirroring turned on');
+    	} else {
+    		cData.globalCrossData = {
+    				data: null,
+    				isEnabled: false
+    		};
+    		Notification.info('Cropper', 'Origin Mirroring turned off');
+    	}
+    },
+    
     toggleCropper: function(event) {
     	// Set core variables
     	let _ = event.target;
@@ -205,6 +228,7 @@ define([
 			imageData: cropper.getImageData(),
 			canvasData: cropper.getCanvasData(),
 			cropBoxData: cropper.getCropBoxData(),
+			crossData: this.getCrossData( cropper.getCropBoxData() ),
 			isNew: false 
     	}
     	
@@ -219,6 +243,38 @@ define([
     		cropper.setData( rData[newObject].data );
     		cropper.setCanvasData( rData[newObject].canvasData );
     		cropper.setCropBoxData( rData[newObject].cropBoxData );
+    	}
+    	
+    	//Check if Origin Mirroring isEnabled
+    	if ( cData.globalCrossData.isEnabled ) {
+    		//Update crossData
+    		cData.globalCrossData = {
+        			data: rData[activeObject].crossData,
+        			isEnabled: cData.globalCrossData.isEnabled
+        	}
+    		
+    		//Prepare
+    		let Old = (rData[newObject].cropBoxData != null) ? rData[newObject].cropBoxData : cropper.getCropBoxData();
+    		let OldCross = (rData[newObject].crossData !=null) ? rData[newObject].crossData : this.getCrossData( cropper.getCropBoxData() );
+    		let NewCross = cData.globalCrossData.data;
+    		let newTop = Old.top;
+    		let newLeft = Old.left;
+    		let newWidth = Old.width;
+    		let newHeight = Old.height;
+    		
+    		//Calculate
+    		let crossXGap = NewCross.x - OldCross.x;
+    		let crossYGap = NewCross.y - OldCross.y;
+	    		newTop += crossYGap;
+	    		newLeft += crossXGap;
+    		
+    		//Set
+    		cropper.setCropBoxData({
+    			top: newTop,
+    			left: newLeft,
+    			width: newWidth,
+    			height: newHeight
+    		});
     	}
     	
     	//Toggle 'active' class at new
@@ -254,7 +310,6 @@ define([
     
     saveCroppedImages: function( croppedImages ) {
     	let encoded = JSON.stringify( croppedImages );
-//    	console.log(encoded);
     	
     	// Send data to Ratios Custom Endpoint
 		$.ajax({
@@ -262,16 +317,17 @@ define([
 		  url: "/directus/api/ratios",
 		  data: { data: encoded },
 		  success: function(result) {
-			  console.log(result);
+			  Notification.success('Cropper', 'Images have been cropped and uploaded!');
 		  },
 		  error: function(error) {
-			  console.warn(error);
+			  Notification.error('Cropper', 'Images have not been uploaded!\n(See the console for details)');
+			  console.error(error);
 		  }
-		})
+		});
     },
     
     cropAndSave: function() {
-    	console.log('Cropping Started...');
+//    	console.log('Cropping Started...');
 
     	var croppedImages = [];
     	
@@ -280,27 +336,10 @@ define([
     		let obj = rData[x.objName];
     		
     		// Log
-    		console.log('Cropping ' + obj.title);
+//    		console.log('Cropping ' + obj.title);
     		
     		// setActive
     		this.setActive( obj );
-    		
-    		/*// Toggle 'active' class
-    		$('.cropper-toggle').removeClass('active');
-    		$('#' + obj.name).addClass('active');
-    		
-    		// Reset
-    		cropper.reset();
-    		
-    		// Set data
-    		cropper.setAspectRatio( obj.aspectRatio );
-    		
-    		// Check if object !isNew and set data if true
-    		if ( !obj.isNew ) {
-    			cropper.setData( obj.data );
-        		cropper.setCanvasData( obj.canvasData );
-        		cropper.setCropBoxData( obj.cropBoxData );
-    		}*/
     		
     		// Crop
     		let cropped = cropper.getCroppedCanvas({
@@ -336,24 +375,19 @@ define([
     		});
     	} );
 		
-		console.log('All Cropped!');
+//		console.log('All Cropped!');
 		
-    	console.log( croppedImages );
+//    	console.log( croppedImages );
     	
     	this.setActive( rData[cData.ratios[0].objName] );
     	
     	this.saveCroppedImages( croppedImages );
-    	
-    	/*// Open each cropped image in new tab
-    	croppedImages.forEach( y => {
-    		window.open(y.encoded, '_blank');
-    	} );*/
     },
     
     // CROPPER METHODS STOP
     
     initialize: function () {
-      console.log('Initialize');
+//      console.log('Initialize');
       
       var FilesModel = require('modules/files/FilesModel'); // eslint-disable-line import/no-unresolved
       var parentModel = this.options.model;
@@ -383,11 +417,11 @@ define([
     },
     
     beforeRender: function() {
-		console.log('Before Render');
+//		console.log('Before Render');
 	},
     
     serialize: function () {
-    	console.log('Serialize');
+//    	console.log('Serialize');
         var url;
         var link;
         var fileAvailable = false;
@@ -434,7 +468,11 @@ define([
 			movementAllowed: this.options.settings.get('allow_image_movement'),
 			rotationAllowed: this.options.settings.get('allow_image_rotation'),
 			flippingAllowed: this.options.settings.get('allow_image_flipping'),
-			ratios: this.getRatios()
+			ratios: this.getRatios(),
+			globalCrossData: {
+				data: null,
+				isEnabled: false
+			}
 		};
         // End
 
@@ -452,23 +490,18 @@ define([
           cData: cData
         };
         
-		//console.log(this.fileModel);
-		//console.log( this.options.settings.get('available_ratios').substring(1, this.options.settings.get('available_ratios').length-1) );
-        
 		return data;
     },
     
     afterRender: function () {
-    	console.log('After Render');
-    	console.log(this.fileModel);
+//    	console.log('After Render');
     	
     	// Cropper
     	
     	if ( cData.sourceImageAvailable ) {
     		var sourceImageHook = $('#c-source-image')[0];
 	        var previewHook = $('.c-preview-container').find('.preview');
-	        	//previewHook.css('height', $('.c-area').css('height')); // DZIAŁA 50/50, POTRZEBNE INNE ROZWIĄZANIE PROBLEMU
-	        															// ROZWIĄZAŁEM PROBLEM, PARENT HEIGHT 50% CHILD 100%
+
 			cropper = new Cropper(sourceImageHook, {
 			  aspectRatio: cData.ratios[0].value,
 			  movable: cData.movementAllowed,
@@ -481,8 +514,7 @@ define([
 				  /* Nothing */
 			  },
 			  ready: function() {
-				  console.log("Cropper Ready!");
-				  //console.log(previewHook);
+//				  console.log("Cropper Ready!");
 			  }
 			});
 			
@@ -500,6 +532,7 @@ define([
 					imageData: null,
 					canvasData: null,
 					cropBoxData: null,
+					crossData: null,
 					isNew: true 
 				}
 			} );
@@ -562,7 +595,8 @@ define([
         'change input[type=file]': 'onInputChange',
         'click .crop-and-save': 'cropAndSave',
         'click .cropper-toggle': 'toggleCropper',
-        'click .reset-active': 'reset'
+        'click .reset-active': 'reset',
+        'change #enable_origin_mirroring': 'originMirroring'
       }
   });
 });
