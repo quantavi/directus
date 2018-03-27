@@ -235,14 +235,21 @@ define([
     	//Reset Cropper
     	cropper.reset();
     	
+    	//Reset options
+    	$('#rotation')[0].value = 0;
+    	
     	//Set new aspect ratio
     	cropper.setAspectRatio( rData[newObject].aspectRatio );
     	
     	//Check if new data source !isNew and load data if true
     	if ( !rData[newObject].isNew ) {
+    		//Load rest of data
     		cropper.setData( rData[newObject].data );
     		cropper.setCanvasData( rData[newObject].canvasData );
     		cropper.setCropBoxData( rData[newObject].cropBoxData );
+    		
+    		//Load options
+    		$('#rotation')[0].value = rData[newObject].imageData.rotate;
     	}
     	
     	//Check if Origin Mirroring isEnabled
@@ -287,6 +294,11 @@ define([
     
     reset: function() {
     	cropper.reset();
+    	$('#rotation')[0].value = 0;
+    },
+    
+    applyRotation: function() {
+    	cropper.rotateTo( parseInt( $('#rotation')[0].value ) );
     },
     
     setActive: function( obj ) {
@@ -596,7 +608,8 @@ define([
         'click .crop-and-save': 'cropAndSave',
         'click .cropper-toggle': 'toggleCropper',
         'click .reset-active': 'reset',
-        'change #enable_origin_mirroring': 'originMirroring'
+        'change #enable_origin_mirroring': 'originMirroring',
+        'input #rotation': 'applyRotation'
       }
   });
 });

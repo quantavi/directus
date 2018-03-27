@@ -426,7 +426,7 @@
 				width: 100%;
 				height: 100%;
 				overflow: hidden;
-				background-color: pink;
+				background-color: #3498db;
 			}
 			
 		.c-options {
@@ -435,7 +435,7 @@
 			width: calc( 30% - 0.5rem );
 			margin: 0 0 0.5rem 0.5rem;
 		}
-			.c-options header {
+			.c-options > header {
 				color: #3498db;
 				font-weight: bold;
 				text-align: center;
@@ -451,7 +451,7 @@
 				display: block;
 				clear: both;
 			}
-				.c-options ul li label {
+				.c-options ul li label[class~='checkbox'] {
 					position: relative;
 						top: 10px;
 					padding: 5px;
@@ -459,6 +459,10 @@
 					.c-options ul li input[type="checkbox"] {
 						float: left;
 					}
+				
+				.c-options ul li label header {
+					text-align: center;
+				}
 				
 				.c-options ul li .c-option-description {
 					padding: 0.2rem;
@@ -499,9 +503,15 @@
 		<header>Options</header>
 		<ul>
 			<li>
-				<label><input id="enable_origin_mirroring" type="checkbox">Origin Mirroring</label>
+				<label class="checkbox"><input id="enable_origin_mirroring" type="checkbox">Origin Mirroring</label>
 				<p class="c-option-description">Copy the position of the tool to other resolutions</p>
 			</li>
+			{{#if cData.rotationAllowed}}
+			<li>
+				<label class="range"><header>Rotation</header><input id="rotation" type="range" min="-180" max="180" value="0"></label>
+				<p class="c-option-description">Adjust image rotation</p>
+			</li>
+			{{/if}}
 		</ul>
 	</div>
 </div>
