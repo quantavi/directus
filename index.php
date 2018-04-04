@@ -726,7 +726,7 @@ $data = [
     'showWelcomeWindow' => $showWelcomeWindow,
     'statusMapping' => $statusMapping
 ];
-
+  
 $templateVars = [
     'cacheBuster' => $cacheBuster,
     'isAuthenticated' => $authentication->loggedIn() === true,

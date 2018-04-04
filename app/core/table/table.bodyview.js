@@ -140,11 +140,11 @@ function(app, Backbone, _, Sortable, Notification) {
       
       if ( currentUser.attributes.group.isAdmin() ) {
     	  
-    	  console.log( "User in Admin group!" );
+//    	  console.log( "User in Admin group!" );
     	  
       } else {
     	  
-    	  console.log( "User in Public group!" );
+//    	  console.log( "User in Public group!" );
 //    	  console.log( tableData.rows );
       tableData.rows.forEach( function( row ) {
     	  // !WARNING! 
