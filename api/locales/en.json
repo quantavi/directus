@@ -628,8 +628,12 @@
     "status_items": "Items",
     "status": "Status",
     "status_active": "Active",
+    "status_inactive": "Inactive",
     "status_delete": "Delete",
     "status_draft": "Draft",
+    "status_publish": "Public",
+    "status_archive": "Archived",
+    "status_disable": "Disabled",
 
     "admin_settings": "Admin Settings",
     "loading": "Loading Data",
