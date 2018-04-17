@@ -70,7 +70,8 @@ class LanguageManager
             'no' => 'Norsk',
             'ja' => '日本語',
             'zh-hans' => '中文（简体）',
-            'zh-hant' => '中文（繁體）'
+            'zh-hant' => '中文（繁體）',
+			'pl' => 'Polski'
         ];
     }
 }

@@ -645,10 +645,21 @@ $statusMapping = [
     '*' => $statusMappingConfiguration
 ];
 
+$statusMapping['*'] = array_replace_recursive($statusMappingConfiguration, [
+    'mapping' => [
+        0 => ['name' => __t('status_delete')],
+        1 => ['name' => __t('status_publish')],
+        2 => ['name' => __t('status_draft')],
+        3 => ['name' => __t('status_archive')],
+        4 => ['name' => __t('status_disable')]
+    ]
+]);
+
 $statusMapping['directus_users'] = array_replace_recursive($statusMappingConfiguration, [
     'mapping' => [
-        1 => ['name' => __t('Active')],
-        2 => ['name' => __t('Inactive')]
+        0 => ['name' => __t('status_delete')],
+        1 => ['name' => __t('status_active')],
+        2 => ['name' => __t('status_inactive')]
     ]
 ]);
 
@@ -726,7 +737,7 @@ $data = [
     'showWelcomeWindow' => $showWelcomeWindow,
     'statusMapping' => $statusMapping
 ];
-
+  
 $templateVars = [
     'cacheBuster' => $cacheBuster,
     'isAuthenticated' => $authentication->loggedIn() === true,
