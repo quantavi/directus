@@ -38,7 +38,15 @@ define(['./interface', 'core/UIComponent', 'core/t'], function (Input, UICompone
   return UIComponent.extend({
     id: 'status',
     dataTypes: ['TINYINT', 'SMALLINT', 'INT', 'BIGINT'],
-    options: [{
+    options: [
+    	{
+			id: 'allow_inheritence',
+			ui: 'toggle',
+			type: 'Boolean',
+			comment: 'If enabled, all children of the item will inherit its status',
+			default_value: true
+		},
+    {
       id: 'delete_value',
       column_name: 'delete_value',
       ui: 'numeric',
