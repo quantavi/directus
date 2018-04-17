@@ -84,7 +84,7 @@ define([
         dateValue: dateValue,
         value: dateValue,
         name: this.name,
-        readOnly: settings.get('read_only') || !this.options.canWrite
+        readOnly: settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only']
       };
     },
 

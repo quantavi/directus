@@ -165,7 +165,7 @@ define(['core/UIView'], function (UIView) {
         name: this.options.name,
         rows: this.options.settings.get('rows'),
         placeholder: this.options.settings.get('placeholder'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only']
       };
     },
 

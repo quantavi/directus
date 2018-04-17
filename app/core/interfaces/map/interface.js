@@ -160,7 +160,7 @@ define([
       var data = {
         value: value,
         name: this.options.name,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only']
       };
 
       if (this.options.schema.get('type') === 'ALIAS') {

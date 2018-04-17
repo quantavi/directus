@@ -207,10 +207,10 @@ define([
 
       return {
         rows: rows,
-        canEdit: this.canEdit,
-        showChooseButton: this.showChooseButton && this.canEdit,
-        showAddButton: this.showAddButton && this.canEdit,
-        showRemoveButton: this.showRemoveButton && this.canEdit,
+        canEdit: this.canEdit || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
+        showChooseButton: this.showChooseButton && this.canEdit || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
+        showAddButton: this.showAddButton && this.canEdit || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
+        showRemoveButton: this.showRemoveButton && this.canEdit || !jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         sortable: sortable
       };
     },

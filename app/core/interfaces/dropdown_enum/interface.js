@@ -45,7 +45,7 @@ define([
         comment: this.options.schema.get('comment'),
         readonly: !this.options.canWrite,
         placeholder: this.options.schema.get('placeholder'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || jsSM[(status = this.options.model.attributes.status)?status:0]['read_only'],
         native: Boolean(Number(this.options.settings.get('use_native_input'))),
         value: value
       };
