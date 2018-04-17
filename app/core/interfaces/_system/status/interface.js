@@ -66,7 +66,7 @@ define([
     				// Check if item status is same as local status
     				if ( this.getChildStatus( location, attr ) != status ) {
     					// Get itemPriority
-        				var itemPriority = item.attributes.data.attributes.priority;
+    					var itemPriority = (attr.attributes.data) ? attr.attributes.data.attributes.priority : 999;
         				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
         				if (itemPriority > rootPriority) {
         					this.setChildStatus( location, itemID, status );
@@ -119,7 +119,7 @@ define([
     				// Get itemID
     				var itemID = attr.attributes.id;
     				// Get itemPriority
-    				var itemPriority = item.attributes.data.attributes.priority;
+    				var itemPriority = (attr.attributes.data) ? attr.attributes.data.attributes.priority : 999;
     				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
     				if (itemPriority > rootPriority) {
     					this.setChildStatus( location, itemID, status );
