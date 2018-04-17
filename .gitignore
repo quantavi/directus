@@ -38,3 +38,8 @@ thumbnail/**/
 .gulp-scss-cache
 node_modules
 storage
+
+# Ignore Eclipse Files
+.buildpath
+.project
+.settings/org.eclipse.wst.validation.prefs
