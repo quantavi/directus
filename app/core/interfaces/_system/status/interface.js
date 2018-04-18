@@ -26,7 +26,10 @@ define([
     	/**
     	 * Get root(this) priority
     	 */
-    	var rootPriority = me.priority;
+    	var rootPriority = me.priority || null;
+    	if (rootPriority == null) {
+    		Notification.warning("Priority is not set!", "Go to table settings and create 'Priority' with appropriate value. Without this, the inheritance of the status will not work properly.");
+    	}
     	/**
     	 * Get attribute as attr
     	 */
@@ -83,7 +86,10 @@ define([
     	/**
     	 * Get root(this) priority
     	 */
-    	var rootPriority = me.priority;
+    	var rootPriority = me.priority || null;
+    	if (rootPriority == null) {
+    		Notification.warning("Priority is not set!", "Go to table settings and create 'Priority' with appropriate value. Without this, the inheritance of the status will not work properly.");
+    	}
     	/**
     	 * Get attribute as attr
     	 */
@@ -277,7 +283,7 @@ define([
         return a.sort - b.sort;
       });
       
-      // Verify if all childs have same status as parent(this item)
+      // Verify/Check if all childs have same status as parent(this item)
       if ( this.model.attributes && this.options.settings.get('allow_inheritence') ) {
     	  this.verifyChildsStatus(this.model.attributes, currentStatus);
       }
