@@ -24,6 +24,10 @@ define([
     
     verifyChildsStatus: function(me, status) {
     	/**
+    	 * Create table for checked items
+    	 */
+    	var childsChecked = [];
+    	/**
     	 * Get root(this) priority
     	 */
     	var rootPriority = me.priority || null;
@@ -42,41 +46,46 @@ define([
     		if (attr instanceof Object && attr != null) {
     			// Get tablename for attr
     			var location = attr.table.id;
-    			// Check if attr contain models = if have any childs
-    			if (attr.models && !_.isEmpty(attr.models)) {
-    				// Loop through all childs
-    				for ( var item in attr.models ) {
-    					// item for now was only a pointer, now it contains an object
-    					item = attr.models[item];
-    					// Get itemID
-        				var itemID = (item.attributes.data) ? item.attributes.data.id : item.attributes.id;
+    			// Skip already checked tables/items
+    			if ( !childsChecked.includes(location) ) {
+    				// We're checking 'location' so we can add it to childsChecked array
+    				childsChecked.push(location);
+    				// Check if attr contain models = if have any childs
+        			if (attr.models && !_.isEmpty(attr.models)) {
+        				// Loop through all childs
+        				for ( var item in attr.models ) {
+        					// item for now was only a pointer, now it contains an object
+        					item = attr.models[item];
+        					// Get itemID
+            				var itemID = (item.attributes.data) ? item.attributes.data.id : item.attributes.id;
+            				// Check if item status is same as local status
+            				if ( this.getChildStatus( location, item ) != status ) {
+            					// Get itemPriority
+            					var itemPriority = (item.attributes.data) ? item.attributes.data.attributes.priority : 999;
+                				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
+                				if (itemPriority > rootPriority) {
+                					this.setChildStatus( location, itemID, status );
+                				}
+            				}
+            				// Verify if all childs of the item has right status
+            				this.verifyChilds( location, itemID, status, rootPriority, childsChecked );
+            			}
+        			// Check if attr contain attributes = if don't have any childs
+        			} else if (attr.attributes && !_.isEmpty(attr.attributes)) {
+        				// Get itemID
+        				var itemID = attr.attributes.id;
         				// Check if item status is same as local status
-        				if ( this.getChildStatus( location, item ) != status ) {
+        				if ( this.getChildStatus( location, attr ) != status ) {
         					// Get itemPriority
-        					var itemPriority = (item.attributes.data) ? item.attributes.data.attributes.priority : 999;
+        					var itemPriority = (attr.attributes.data) ? attr.attributes.data.attributes.priority : 999;
             				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
             				if (itemPriority > rootPriority) {
             					this.setChildStatus( location, itemID, status );
             				}
         				}
         				// Verify if all childs of the item has right status
-        				this.verifyChilds( location, itemID, status, rootPriority );
+        				this.verifyChilds( location, itemID, status, rootPriority, childsChecked );
         			}
-    			// Check if attr contain attributes = if don't have any childs
-    			} else if (attr.attributes && !_.isEmpty(attr.attributes)) {
-    				// Get itemID
-    				var itemID = attr.attributes.id;
-    				// Check if item status is same as local status
-    				if ( this.getChildStatus( location, attr ) != status ) {
-    					// Get itemPriority
-    					var itemPriority = (attr.attributes.data) ? attr.attributes.data.attributes.priority : 999;
-        				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
-        				if (itemPriority > rootPriority) {
-        					this.setChildStatus( location, itemID, status );
-        				}
-    				}
-    				// Verify if all childs of the item has right status
-    				this.verifyChilds( location, itemID, status, rootPriority );
     			}
     		}
     	}
@@ -84,6 +93,10 @@ define([
     
     transferStatusToChilds: function(me, status) {
     	/**
+    	 * Create table for checked items
+    	 */
+    	var childsChecked = [];
+    	/**
     	 * Get root(this) priority
     	 */
     	var rootPriority = me.priority || null;
@@ -102,35 +115,40 @@ define([
     		if (attr instanceof Object && attr != null) {
     			// Get tablename for attr
     			var location = attr.table.id;
-    			// Check if attr contain models = if have any childs
-    			if (attr.models && !_.isEmpty(attr.models)) {
-    				// Loop through all childs
-    				for ( var item in attr.models ) {
-    					// item for now was only a pointer, now it contains an object
-    					item = attr.models[item];
-    					// Get itemID
-    					var itemID = (item.attributes.data) ? item.attributes.data.id : item.attributes.id;
+    			// Skip already checked tables/items
+    			if ( !childsChecked.includes(location) ) {
+    				// We're checking 'location' so we can add it to childsChecked array
+    				childsChecked.push(location);
+    				// Check if attr contain models = if have any childs
+        			if (attr.models && !_.isEmpty(attr.models)) {
+        				// Loop through all childs
+        				for ( var item in attr.models ) {
+        					// item for now was only a pointer, now it contains an object
+        					item = attr.models[item];
+        					// Get itemID
+        					var itemID = (item.attributes.data) ? item.attributes.data.id : item.attributes.id;
+            				// Get itemPriority
+            				var itemPriority = (item.attributes.data) ? item.attributes.data.attributes.priority : 999;
+            				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
+            				if (itemPriority > rootPriority) {
+            					this.setChildStatus( location, itemID, status );
+            				}
+            				// Verify if all childs of the item has right status
+            				this.verifyChilds( location, itemID, status, rootPriority, childsChecked );
+            			}
+        			// Check if attr contain attributes = if don't have any childs
+        			} else if (attr.attributes && !_.isEmpty(attr.attributes)) {
+        				// Get itemID
+        				var itemID = attr.attributes.id;
         				// Get itemPriority
-        				var itemPriority = (item.attributes.data) ? item.attributes.data.attributes.priority : 999;
+        				var itemPriority = (attr.attributes.data) ? attr.attributes.data.attributes.priority : 999;
         				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
         				if (itemPriority > rootPriority) {
         					this.setChildStatus( location, itemID, status );
         				}
         				// Verify if all childs of the item has right status
-        				this.verifyChilds( location, itemID, status, rootPriority );
+        				this.verifyChilds( location, itemID, status, rootPriority, childsChecked );
         			}
-    			// Check if attr contain attributes = if don't have any childs
-    			} else if (attr.attributes && !_.isEmpty(attr.attributes)) {
-    				// Get itemID
-    				var itemID = attr.attributes.id;
-    				// Get itemPriority
-    				var itemPriority = (attr.attributes.data) ? attr.attributes.data.attributes.priority : 999;
-    				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
-    				if (itemPriority > rootPriority) {
-    					this.setChildStatus( location, itemID, status );
-    				}
-    				// Verify if all childs of the item has right status
-    				this.verifyChilds( location, itemID, status, rootPriority );
     			}
     		}
     	}
@@ -209,37 +227,47 @@ define([
     	return accurateChilds;
     },
     
-    verifyChilds: function(location, itemID, status, rootPriority) {
+    verifyChilds: function(location, itemID, status, rootPriority, childsChecked) {
     	// Wait until getAllChilds finish
     	$.when(this.getAllChilds( location, itemID )).done((childs) => {
-//    		console.log(childs);
     		// Filter unnecesary childs
 			childs = this.filterChilds( childs, this.model.table.id );
-//			console.log(childs);
-			// Loop through all childs
-			for (var child in childs) {
-				// child for now was only a pointer, now it contains an object
-				child = childs[child];
-				// Get child table
-				var location = child.meta.table;
-				// Skip items from directus tables
-				if (!location.includes("directus_")) {
-					// Loop through all items in that child
-					for (var item in child.data) {
-						// item for now was only a pointer, now it contains an object
-						item = child.data[item];
-						// Get itemID
-						var itemID = item.id;
-//						console.log(this.getChildStatus( location, item ));
-						// Check item status
-						if ( this.getChildStatus( location, item ) != status ) {
-//							console.log(item);
-							// Get itemPriority
-		    				var itemPriority = (item.priority) ? item.priority : 999;
-		    				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
-		    				if (itemPriority > rootPriority) {
-		    					this.setChildStatus( location, itemID, status );
-		    				}
+//				console.log(childs);
+			// BREAKPOINT -> stop if childs is empty, it means there is no more childs
+			if ( !_.isEmpty(childs) ) {
+				// Loop through all childs
+				for (var child in childs) {
+					// child for now was only a pointer, now it contains an object
+					child = childs[child];
+//						console.log(child);
+					// Get child table
+					var location = child.meta.table;
+					// Skip items from directus tables
+//						console.log(childsChecked);
+					if (!location.includes("directus_") && !childsChecked.includes(location)) {
+						// We're checking 'location' so we can add it to childsChecked array
+						childsChecked.push(location);
+						// Loop through all items in that child
+						for (var item in child.data) {
+							// item for now was only a pointer, now it contains an object
+							item = child.data[item];
+//								console.log(item);
+//								console.log(location);
+							// Get itemID
+							var itemID = item.id;
+//							console.log(this.getChildStatus( location, item ));
+							// Check item status
+							if ( this.getChildStatus( location, item ) != status ) {
+//									console.log(item);
+								// Get itemPriority
+			    				var itemPriority = (item.priority) ? item.priority : 999;
+			    				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
+			    				if (itemPriority > rootPriority) {
+			    					this.setChildStatus( location, itemID, status );
+			    				}
+							}							
+							// Look for sub childrens until the end of the world or until you check every accessible table
+							this.verifyChilds( location, itemID, status, rootPriority, childsChecked );
 						}
 					}
 				}
