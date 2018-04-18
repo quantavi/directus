@@ -46,11 +46,11 @@ define([
     					// item for now was only a pointer, now it contains an object
     					item = attr.models[item];
     					// Get itemID
-        				var itemID = item.attributes.data.id;
+        				var itemID = (item.attributes.data) ? item.attributes.data.id : item.attributes.id;
         				// Check if item status is same as local status
         				if ( this.getChildStatus( location, item ) != status ) {
         					// Get itemPriority
-            				var itemPriority = item.attributes.data.attributes.priority;
+        					var itemPriority = (item.attributes.data) ? item.attributes.data.attributes.priority : 999;
             				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
             				if (itemPriority > rootPriority) {
             					this.setChildStatus( location, itemID, status );
@@ -90,7 +90,6 @@ define([
     	for ( var attr in me ) {
     		// attr for now was only a pointer, now it contains an object
     		attr = me[attr];
-//    		console.log(attr);
     		/**
     		 * Check if attr is an Object and isn't null
     		 */
@@ -104,9 +103,9 @@ define([
     					// item for now was only a pointer, now it contains an object
     					item = attr.models[item];
     					// Get itemID
-        				var itemID = item.attributes.data.id;
+    					var itemID = (item.attributes.data) ? item.attributes.data.id : item.attributes.id;
         				// Get itemPriority
-        				var itemPriority = item.attributes.data.attributes.priority;
+        				var itemPriority = (item.attributes.data) ? item.attributes.data.attributes.priority : 999;
         				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
         				if (itemPriority > rootPriority) {
         					this.setChildStatus( location, itemID, status );
@@ -148,17 +147,25 @@ define([
     },
     
     getChildStatus: function(table, item) {
-    	if (item.attributes) {
-    		if (item.attributes.data) {
-    			return item.attributes.data.attributes.status;
-    		} else {
-    			return item.attributes.status;
-    		}
-    	} else if (item.status) {
-    		return item.status;
-    	} else {
-    		Notification.error(`Unable to get item ${item.id} status from ${table}!`);
-    		return -1;
+    	// Skip directus tables
+    	if (!table.includes("directus_")) {
+    		// Check if item has attributes
+    		if (item.attributes) {
+    			// Check if item.attributes has data attribiute
+        		if (item.attributes.data) {
+        			return item.attributes.data.attributes.status;
+        		// Or not
+        		} else {
+        			return item.attributes.status;
+        		}
+        	// Or maybe item has directly accessible status
+        	} else if (item.status) {
+        		return item.status;
+        	// Or we have a problem ;P
+        	} else {
+        		Notification.error(`Unable to get item ${item.id} status from ${table}!`);
+        		return -1;
+        	}
     	}
     },
     
@@ -178,14 +185,21 @@ define([
     },
     
     filterChilds: function(childs, skipTable) {
+    	// Prepare object for our accurate childrens
     	var accurateChilds = {};
+    	// Change the childs object to childs.data
     	childs = childs.data;
+    	// Loop through all given childs
     	for (var child in childs) {
+    		// Assign appropriate child to variable
     		child = childs[child];
+    		// Check if child is an Object, if it is not Empty and if it table is not same as restricted table
     		if (child instanceof Object && !_.isEmpty(child) && child.meta.table != skipTable) {
+    			// This child is accurate
     			accurateChilds[child.meta.table] = child
     		}
     	}
+    	// Return
     	return accurateChilds;
     },
     
@@ -200,22 +214,25 @@ define([
 				child = childs[child];
 				// Get child table
 				var location = child.meta.table;
-				// Loop through all items in that child
-				for (var item in child.data) {
-					// item for now was only a pointer, now it contains an object
-					item = child.data[item];
-					// Get itemID
-					var itemID = item.id;
-//					console.log(this.getChildStatus( location, item ));
-					// Check item status
-					if ( this.getChildStatus( location, item ) != status ) {
-//						console.log(item);
-						// Get itemPriority
-	    				var itemPriority = item.priority;
-	    				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
-	    				if (itemPriority > rootPriority) {
-	    					this.setChildStatus( location, itemID, status );
-	    				}
+				// Skip items from directus tables
+				if (!location.includes("directus_")) {
+					// Loop through all items in that child
+					for (var item in child.data) {
+						// item for now was only a pointer, now it contains an object
+						item = child.data[item];
+						// Get itemID
+						var itemID = item.id;
+//						console.log(this.getChildStatus( location, item ));
+						// Check item status
+						if ( this.getChildStatus( location, item ) != status ) {
+//							console.log(item);
+							// Get itemPriority
+		    				var itemPriority = item.priority;
+		    				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
+		    				if (itemPriority > rootPriority) {
+		    					this.setChildStatus( location, itemID, status );
+		    				}
+						}
 					}
 				}
 			}
@@ -259,9 +276,9 @@ define([
       });
       
       // Verify if all childs have same status as parent(this item)
-      /*if ( this.model.attributes && this.options.settings.get('allow_inheritence') ) {
+      if ( this.model.attributes && this.options.settings.get('allow_inheritence') ) {
     	  this.verifyChildsStatus(this.model.attributes, currentStatus);
-      }*/
+      }
 
       return {
         table: table.id,
