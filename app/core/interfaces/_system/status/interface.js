@@ -57,7 +57,7 @@ define([
             				}
         				}
         				// Verify if all childs of the item has right status
-        				this.verifyChilds( location, itemID, status );
+        				this.verifyChilds( location, itemID, status, rootPriority );
         			}
     			// Check if attr contain attributes = if don't have any childs
     			} else if (attr.attributes && !_.isEmpty(attr.attributes)) {
@@ -73,7 +73,7 @@ define([
         				}
     				}
     				// Verify if all childs of the item has right status
-    				this.verifyChilds( location, itemID, status );
+    				this.verifyChilds( location, itemID, status, rootPriority );
     			}
     		}
     	}
@@ -206,8 +206,10 @@ define([
     verifyChilds: function(location, itemID, status, rootPriority) {
     	// Wait until getAllChilds finish
     	$.when(this.getAllChilds( location, itemID )).done((childs) => {
+//    		console.log(childs);
     		// Filter unnecesary childs
 			childs = this.filterChilds( childs, this.model.table.id );
+//			console.log(childs);
 			// Loop through all childs
 			for (var child in childs) {
 				// child for now was only a pointer, now it contains an object
@@ -227,7 +229,7 @@ define([
 						if ( this.getChildStatus( location, item ) != status ) {
 //							console.log(item);
 							// Get itemPriority
-		    				var itemPriority = item.priority;
+		    				var itemPriority = (item.priority) ? item.priority : 999;
 		    				// Check if the itemPriority is lower than the rootPriority, and setChildStatus
 		    				if (itemPriority > rootPriority) {
 		    					this.setChildStatus( location, itemID, status );
