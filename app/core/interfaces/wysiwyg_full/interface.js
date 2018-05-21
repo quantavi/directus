@@ -139,6 +139,70 @@ define([
         toolbar: toolbar,
         content_style: 'body.mce-content-body {font-family: \'Roboto\', sans-serif;line-height:24px;letter-spacing:0.2px;font-size:14px;color:#333;margin:0;padding: 10px 30px !important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}body.mce-content-body p{line-height:inherit !important;}body.mce-content-body img{max-width:100% !important;}',
         style_formats: styleFormats,
+        file_picker_callback: function(cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            
+            // Note: In modern browsers input[type="file"] is functional without 
+            // even adding it to the DOM, but that might not be the case in some older
+            // or quirky browsers like IE, so you might want to add it to the DOM
+            // just in case, and visually hide it. And do not forget do remove it
+            // once you do not need it anymore.
+
+            input.onchange = function() {
+              var file = this.files[0];
+              
+              var reader = new FileReader();
+              reader.onload = function () {
+                // Note: Now we need to register the blob in TinyMCEs image blob
+                // registry. In the next release this part hopefully won't be
+                // necessary, as we are looking to handle it internally.
+                var id = 'blobid' + (new Date()).getTime();
+                var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                var base64 = reader.result.split(',')[1];
+                var blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+
+                // call the callback and populate the Title field with the file name
+                cb(blobInfo.blobUri(), { title: file.name });
+              };
+              reader.readAsDataURL(file);
+            };
+            
+            input.click();
+        },
+        images_upload_handler: function (blobInfo, success, failure) {
+        	console.log(blobInfo);
+        	var data = {
+    	        	"name": blobInfo.blob().name,
+    	        	"title": blobInfo.blob().name.substring(0, blobInfo.blob().name.length-4),
+    	        	"size": blobInfo.blob().size,
+    	        	"type": blobInfo.blob().type,
+    	        	"charset": "binary",
+    	        	"data": `data:${blobInfo.blob().type};base64,${blobInfo.base64()}`,
+    	        	"width": null,
+    	        	"height": null,
+    	        	"user": null,
+    	        	"date_uploaded": null
+    	    };
+        	console.log(data);
+        	var settings = {
+			  "async": true,
+			  "crossDomain": false,
+			  "url": "http://debian.vm/directus/api/1.1/files",
+			  "method": "POST",
+			  "data": data
+			};
+			$.ajax(settings)
+				.done(function (response) {
+					console.log(response);
+					success(response.data.url);
+				})
+				.fail(function (response) {
+					console.warn(response);
+				});
+        },
         setup: function (editor) {
           /**
            * Event handler for the input event of the TineMCE editor
