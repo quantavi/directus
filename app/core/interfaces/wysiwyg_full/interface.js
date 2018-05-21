@@ -189,7 +189,7 @@ define([
         	console.log(data);
         	var settings = {
 			  "async": true,
-			  "crossDomain": false,
+			  "crossDomain": true,
 			  "url": "http://debian.vm/directus/api/1.1/files",
 			  "method": "POST",
 			  "data": data
