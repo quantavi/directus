@@ -105,6 +105,7 @@ define([
       var defaultValue = this.options.schema.get('default_value');
       var placeholderAvailable = Boolean(this.options.settings.get('placeholder')) && this.options.settings.get('placeholder').length > 0;
       var value = this.options.value || defaultValue;
+      var alreadyUsed = [];
 
       if (value instanceof Backbone.Model) {
         value = value.id;
@@ -125,6 +126,30 @@ define([
           selected: value !== undefined && model.id === value
         };
       }, this);
+      
+      if ( data != null ) {
+    	  $.ajax({
+      		  method: "GET",
+      		  url: `/directus/api/1.1/tables/exhibits/rows?preview=1`, // preview=1 Ignore status, return all data
+      		  async: false,
+      		  timeout: 0,
+      		  success: function(result) {
+      			  console.log(result);
+      			  for ( let item in result.data ) {
+      				  item = result.data[item];
+      				  if ( item.beacon != null ) {
+      					  let index = data.findIndex( checked => {
+      						  return item.beacon.data.tag == checked.name;
+      					  } );
+      					  if ( index >= 0 ) data.splice( index, 1 );
+      				  }
+      			  }
+      		  },
+      		  error: function(error) {
+      			  console.error(error);
+      		  }
+    	  });
+      }
 
       // Pick first element if there's no placeholder available
       if (data.length > 0 && !placeholderAvailable && value === undefined) {
@@ -190,7 +215,7 @@ define([
       if (this.columnSchema.options.get('result_limit')) {
         data.limit = this.columnSchema.options.get('result_limit');
       }
-
+      
       // FILTER HERE!
       if (this.canRead()) {
         this.collection.fetch({includeFilters: false, data: data});
