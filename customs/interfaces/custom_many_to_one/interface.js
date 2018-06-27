@@ -106,7 +106,7 @@ define([
       var placeholderAvailable = Boolean(this.options.settings.get('placeholder')) && this.options.settings.get('placeholder').length > 0;
       var value = this.options.value || defaultValue;
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       if (value instanceof Backbone.Model) {
         value = value.id;

@@ -37,7 +37,7 @@ define(['app', 'underscore', 'core/interfaces/datetime/date'], function (app, _,
       var date = this.value;
       var format = dateFormat + ' ' + timeFormat;
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       return _.extend(data, {
         useDate: true,

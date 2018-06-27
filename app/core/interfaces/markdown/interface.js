@@ -51,7 +51,7 @@ define([
 
     serialize: function () {
     	var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-        var status = this.options.model.attributes.status;
+        var status = this.options.model.attributes.status || 1;
       return {
         rawValue: this.options.value,
         value: this.options.value ? marked(this.options.value) : '',

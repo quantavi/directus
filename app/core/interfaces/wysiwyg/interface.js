@@ -76,7 +76,7 @@ define(['core/UIView', 'core/interfaces/wysiwyg/vendor/medium-editor.min', 'app'
       var value = this.options.value || '';
       var buttonsLength = this.options.settings.get('buttons').split(',').length;
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       return {
         value: value,

@@ -43,7 +43,7 @@ define([
       var hasPlaceHolder = this.options.schema.has('placeholder');
       var placeholder = this.options.schema.get('placeholder') || __t('select_from_below');
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       var optionsArray = Object.keys(options).map(function (key) {
         return {
           key: key,

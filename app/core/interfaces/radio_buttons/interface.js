@@ -33,7 +33,7 @@ define([
       var value = this.options.value || this.columnSchema.get('default_value') || '';
       var options = parseOptions(this.options.settings.get('options'));
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       var optionsArray = Object.keys(options).map(function (key) {
         return {
           key: key,

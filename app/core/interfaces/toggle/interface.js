@@ -24,7 +24,7 @@ define(['underscore', 'utils', 'core/UIView', 'app'], function (_, Utils, UIView
 
     serialize: function () {
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       var value = this.options.value;
 
       if (value === undefined && this.options.schema.has('default_value')) {

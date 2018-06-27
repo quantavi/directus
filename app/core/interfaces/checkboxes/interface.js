@@ -62,7 +62,7 @@ define([
     },
     serialize: function () {
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       var value = typeof this.options.value === 'string' ?
         this.options.value :
         this.columnSchema.get('default_value') || '';

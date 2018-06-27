@@ -173,7 +173,7 @@ define(['underscore', 'core/UIView', 'core/t', 'core/interfaces/color/lib/color'
       var output = this.options.settings.get('output');
       var userPalette = this.options.settings.get('palette') || [];
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       var value = '';
       var outputValue = '';

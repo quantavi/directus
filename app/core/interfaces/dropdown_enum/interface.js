@@ -28,7 +28,7 @@ define([
     serialize: function () {
       var value = this.options.value || this.columnSchema.get('default_value') || '';
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       var enumText = this.options.schema.attributes.column_type;
       enumText = enumText.substr(5, enumText.length - 6); // Remove enum() from string

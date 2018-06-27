@@ -52,7 +52,7 @@ define(['core/UIView', './lib/text-scrambler', 'app'], function (UIView, TextScr
     serialize: function () {
       var value = this.options.value || this.options.schema.get('default_value') || '';
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       return {
         value: value,

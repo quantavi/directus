@@ -176,7 +176,7 @@ define([
       var link;
       
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       if (this.fileModel.has('name')) {
         if (this.fileModel.isNew()) {

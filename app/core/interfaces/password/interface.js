@@ -118,7 +118,7 @@ define(['underscore', 'core/UIView', 'core/t', 'core/notification', 'app'], func
 
     serialize: function () {
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       return {
         name: this.options.name,
         value: this.options.value,

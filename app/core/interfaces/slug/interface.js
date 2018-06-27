@@ -14,7 +14,7 @@ define(function (require, exports, module) {
 
     serialize: function () {
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       var length = this.options.schema.get('char_length');
       var value = this.options.value || '';
 

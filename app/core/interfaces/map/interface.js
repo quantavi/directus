@@ -157,7 +157,7 @@ define([
     serialize: function () {
       var value = this.options.value || '';
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       var data = {
         value: value,

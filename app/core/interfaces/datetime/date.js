@@ -77,7 +77,7 @@ define([
       var isValid = this.value.isValid();
       var dateValue = isValid ? this.value.format(dateFormat) : null;
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
 
       return {
         hasValue: isValid,

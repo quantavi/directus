@@ -27,7 +27,7 @@ define(['core/CustomUIView', 'core/t', 'app'], function (UIView, __t, app) {
       var charsLeft = length - value.toString().length;
       var placeholder = settings.get('placeholder') || '';
       var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
-      var status = this.options.model.attributes.status;
+      var status = this.options.model.attributes.status || 1;
       var readOnly = settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false;
       var showCharacterCount = this.options.schema.get('length');
       var size = settings.get('size');
