@@ -1,7 +1,3 @@
-# Ignore configuration files
-api/config.php
-api/configuration.php
-
 documents
 
 assets/css/*.map
@@ -38,3 +34,6 @@ thumbnail/**/
 .gulp-scss-cache
 node_modules
 storage
+org.eclipse.wst.validation.prefs
+.project
+.buildpath

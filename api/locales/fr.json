@@ -71,7 +71,6 @@
     "right_column": "Colonne droite",
     "related_column": "Colonne relationnelle",
     "alias_column_description": "Les colonnes ALIAS n'existent pas dans le modèle de la table. Elles représentent un champ qui ne stocke pas de données ou la stocke ailleurs.",
-    "alias_column_description": "ALIAS columns do not exist within the table's schema – instead, they represent a field that doesn't store data or stores it elsewhere.",
     "relationship_type": "Type de relation",
     "relationship_settings": "Paramètres relationnels",
     "unregistered_tables": "Tables non enregistrée",
