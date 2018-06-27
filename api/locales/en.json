@@ -657,5 +657,7 @@
     "relational_count_x_item_multiple": "%{count} items",
     "loaded_items": "Loaded Items",
     "filtered_items": "Filtered Results",
-    "header_new_filter": "Add New Filter"
+    "header_new_filter": "Add New Filter",
+    
+    "use_all_caps_only_for_acronyms": "Use ALL CAPS only for acronyms"
 }

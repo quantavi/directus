@@ -18,7 +18,7 @@ composer.lock
 customs/extensions/*
 !customs/extensions/.gitignore
 !customs/extensions/_example/
-customs/interfaces/*
+!customs/interfaces/*
 !customs/interfaces/.gitignore
 !customs/interfaces/_example
 /customs/listviews/*
