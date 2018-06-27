@@ -1,4 +1,4 @@
-define(['core/UIView'], function (UIView) {
+define(['core/UIView', 'app'], function (UIView, app) {
   'use strict';
 
   return UIView.extend({
@@ -26,7 +26,9 @@ define(['core/UIView'], function (UIView) {
       var autoSize = settings.get('size') === 'auto';
       var charsLeft = length - value.toString().length;
       var placeholder = settings.get('placeholder') || '';
-      var readOnly = settings.get('read_only') || !this.options.canWrite;
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status || 1;
+      var readOnly = settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false;
       var showCharacterCount = this.options.schema.get('length');
       var size = settings.get('size');
 

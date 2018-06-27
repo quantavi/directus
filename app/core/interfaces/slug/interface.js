@@ -3,6 +3,7 @@ define(function (require, exports, module) {
 
   var UIView = require('core/UIView');
   var slug = require('libs/node-slug');
+  var app = require('app');
 
   module.exports = UIView.extend({
     template: 'slug/input',
@@ -12,6 +13,8 @@ define(function (require, exports, module) {
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var length = this.options.schema.get('char_length');
       var value = this.options.value || '';
 
@@ -26,7 +29,8 @@ define(function (require, exports, module) {
         readOnly:
           (onlyOnCreation === true && isNew === false) ||
           this.options.settings.get('read_only') ||
-          (this.options.canWrite === false)
+          (this.options.canWrite === false) ||
+          status ? statusMapping[status].read_only : false
       };
     },
 

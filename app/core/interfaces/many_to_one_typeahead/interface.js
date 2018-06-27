@@ -36,11 +36,13 @@ define(['app', 'handlebars', 'core/UIView', 'utils'], function (app, Handlebars,
 
     serialize: function () {
       var relatedModel = this.model.get(this.name);
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       return {
         name: this.options.name,
         size: this.columnSchema.options.get('size'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         disabled: !this.visibleColumn,
         selectedItem: relatedModel,
         hasSelectedItem: !relatedModel.isNew(),

@@ -1,5 +1,5 @@
 /* global $ _ */
-define(['core/UIView', './lib/text-scrambler'], function (UIView, TextScrambler) {
+define(['core/UIView', './lib/text-scrambler', 'app'], function (UIView, TextScrambler, app) {
   'use strict';
 
   return UIView.extend({
@@ -51,12 +51,14 @@ define(['core/UIView', './lib/text-scrambler'], function (UIView, TextScrambler)
 
     serialize: function () {
       var value = this.options.value || this.options.schema.get('default_value') || '';
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       return {
         value: value,
         name: this.options.name,
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         hide: this.options.settings.get('hide_value'),
         placeholder: (this.options.settings) ? this.options.settings.get('placeholder') : ''
       };

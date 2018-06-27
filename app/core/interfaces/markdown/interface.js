@@ -1,7 +1,8 @@
 define([
   'core/UIView',
-  'marked'
-], function (UIView, marked) {
+  'marked',
+  'app'
+], function (UIView, marked, app) {
   'use strict';
 
   return UIView.extend({
@@ -49,13 +50,15 @@ define([
     },
 
     serialize: function () {
+    	var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+        var status = this.options.model.attributes.status;
       return {
         rawValue: this.options.value,
         value: this.options.value ? marked(this.options.value) : '',
         name: this.options.name,
         rows: this.options.settings.get('rows'),
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         always_show_preview: this.options.settings.get('always_show_preview')
       };
     }

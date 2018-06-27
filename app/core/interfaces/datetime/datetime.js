@@ -36,6 +36,8 @@ define(['app', 'underscore', 'core/interfaces/datetime/date'], function (app, _,
       var data = ParentInput.prototype.serialize.apply(this, arguments);
       var date = this.value;
       var format = dateFormat + ' ' + timeFormat;
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       return _.extend(data, {
         useDate: true,
@@ -44,7 +46,7 @@ define(['app', 'underscore', 'core/interfaces/datetime/date'], function (app, _,
         dateValue: date.format(this.getDateFormat()),
         value: date.format(format),
         name: this.name,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       });
     }
   });

@@ -1,8 +1,9 @@
 define([
   'core/UIView',
   'underscore',
-  'utils'
-], function (UIView, _, Utils) {
+  'utils',
+  'app'
+], function (UIView, _, Utils, app) {
   function parseOptions(options) {
     if (_.isString(options)) {
       try {
@@ -60,6 +61,8 @@ define([
       this.model.set(this.name, out);
     },
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var value = typeof this.options.value === 'string' ?
         this.options.value :
         this.columnSchema.get('default_value') || '';
@@ -118,7 +121,7 @@ define([
         custom: customArray,
         name: this.options.name,
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         value: value,
         allowCustomCheckboxes: this.options.settings.get(
           'allow_custom_checkboxes'

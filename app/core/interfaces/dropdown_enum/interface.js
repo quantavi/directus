@@ -3,8 +3,9 @@ define([
   'underscore',
   'core/UIView',
   'utils',
-  'select2'
-], function (_, UIView, Utils) {
+  'select2',
+  'app'
+], function (_, UIView, Utils, s2, app) {
 
   return UIView.extend({
     template: 'dropdown_enum/input',
@@ -26,6 +27,8 @@ define([
     },
     serialize: function () {
       var value = this.options.value || this.columnSchema.get('default_value') || '';
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       var enumText = this.options.schema.attributes.column_type;
       enumText = enumText.substr(5, enumText.length - 6); // Remove enum() from string
@@ -43,7 +46,7 @@ define([
         options: enumArray,
         name: this.options.name,
         comment: this.options.schema.get('comment'),
-        readonly: !this.options.canWrite,
+        readonly: !this.options.canWrite || status ? statusMapping[status].read_only : false,
         placeholder: this.options.schema.get('placeholder'),
         readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
         native: Boolean(Number(this.options.settings.get('use_native_input'))),

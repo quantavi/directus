@@ -1,4 +1,4 @@
-define(['core/UIView', 'core/interfaces/wysiwyg/vendor/medium-editor.min'], function (UIView, MediumEditor) {
+define(['core/UIView', 'core/interfaces/wysiwyg/vendor/medium-editor.min', 'app'], function (UIView, MediumEditor, app) {
   'use strict';
 
   var buttonTypes = {
@@ -75,12 +75,14 @@ define(['core/UIView', 'core/interfaces/wysiwyg/vendor/medium-editor.min'], func
     serialize: function () {
       var value = this.options.value || '';
       var buttonsLength = this.options.settings.get('buttons').split(',').length;
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       return {
         value: value,
         name: this.name,
         widthClass: getWidthClass(buttonsLength),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || statusMapping[status].read_only,
         simple_editor: (this.options.settings && this.options.settings.get('simple_editor') === true)
       };
 

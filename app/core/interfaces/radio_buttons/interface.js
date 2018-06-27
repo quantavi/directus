@@ -1,7 +1,8 @@
 define([
   'underscore',
-  'core/UIView'
-], function (_, UIView) {
+  'core/UIView',
+  'app'
+], function (_, UIView, app) {
   'use strict';
 
   function parseOptions(options) {
@@ -31,6 +32,8 @@ define([
     serialize: function () {
       var value = this.options.value || this.columnSchema.get('default_value') || '';
       var options = parseOptions(this.options.settings.get('options'));
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var optionsArray = Object.keys(options).map(function (key) {
         return {
           key: key,
@@ -55,7 +58,7 @@ define([
         options: optionsArray,
         name: this.options.name,
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         value: value,
         allow_custom: this.options.settings.get('allow_custom_value'),
         valueIsCustom: valueIsCustom

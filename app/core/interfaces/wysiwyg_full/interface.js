@@ -13,10 +13,12 @@ define([
 
     serialize: function () {
       var value = this.options.value || '';
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       return {
         value: value,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || statusMapping[status].read_only,
         name: this.options.name
       };
     },

@@ -76,6 +76,8 @@ define([
       var settings = this.options.settings;
       var isValid = this.value.isValid();
       var dateValue = isValid ? this.value.format(dateFormat) : null;
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       return {
         hasValue: isValid,
@@ -84,7 +86,7 @@ define([
         dateValue: dateValue,
         value: dateValue,
         name: this.name,
-        readOnly: settings.get('read_only') || !this.options.canWrite
+        readOnly: settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       };
     },
 

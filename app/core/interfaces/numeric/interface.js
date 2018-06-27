@@ -9,8 +9,9 @@
 define([
   'core/UIView',
   'utils',
-  'core/t'
-], function (UIView, Utils, __t) {
+  'core/t',
+  'app'
+], function (UIView, Utils, __t, app) {
   return UIView.extend({
 
     template: 'numeric/input',
@@ -28,6 +29,8 @@ define([
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var value = '';
 
       if (!isNaN(this.options.value)) {
@@ -65,7 +68,7 @@ define([
         size: this.options.settings.get('size'),
         placeholder: (this.options.settings) ? this.options.settings.get('placeholder') : '',
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         step: step
       };
     }

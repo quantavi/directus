@@ -1,4 +1,4 @@
-define(['core/UIView'], function (UIView) {
+define(['core/UIView', 'app'], function (UIView, app) {
   'use strict';
 
   return UIView.extend({
@@ -16,6 +16,8 @@ define(['core/UIView'], function (UIView) {
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       if (this.options.model.isNew() && this.options.schema.has('default_value')) {
         this.options.value = this.options.schema.get('default_value');
       }
@@ -23,7 +25,7 @@ define(['core/UIView'], function (UIView) {
       return {
         value: this.options.value || 0,
         name: this.options.name,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         min: this.options.settings.get('minimum'),
         max: this.options.settings.get('maximum'),
         step: this.options.settings.get('step'),

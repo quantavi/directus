@@ -4,8 +4,9 @@ define([
   'underscore',
   'utils',
   'core/t',
-  'select2'
-], function (UIView, _, Utils, __t) {
+  'select2',
+  'app'
+], function (UIView, _, Utils, __t, s2, app) {
   function parseOptions(options) {
     if (_.isString(options)) {
       try {
@@ -41,6 +42,8 @@ define([
       var options = parseOptions(this.options.settings.get('options'));
       var hasPlaceHolder = this.options.schema.has('placeholder');
       var placeholder = this.options.schema.get('placeholder') || __t('select_from_below');
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var optionsArray = Object.keys(options).map(function (key) {
         return {
           key: key,
@@ -53,7 +56,7 @@ define([
         options: optionsArray,
         name: this.options.name,
         comment: this.options.schema.get('comment'),
-        readonly: !this.options.canWrite,
+        readonly: !this.options.canWrite || status ? statusMapping[status].read_only : false,
         showSelectOption: hasPlaceHolder || this.columnSchema.isNullable(),
         placeholder: placeholder,
         readOnly: this.options.settings.get('read_only') || !this.options.canWrite,

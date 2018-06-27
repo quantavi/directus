@@ -1,4 +1,4 @@
-define(['core/CustomUIView', 'core/t'], function (UIView, __t) {
+define(['core/CustomUIView', 'core/t', 'app'], function (UIView, __t, app) {
   'use strict';
 
   return UIView.extend({
@@ -8,7 +8,6 @@ define(['core/CustomUIView', 'core/t'], function (UIView, __t) {
       'focus input': 'toggleHideClass',
       'blur input': 'toggleHideClass',
       'input input': 'saveAndUpdateCharCount',
-      'input input': 'checkOnlyCaps',
       'keypress input': 'validateString'
     },
 
@@ -27,7 +26,9 @@ define(['core/CustomUIView', 'core/t'], function (UIView, __t) {
       var autoSize = settings.get('size') === 'auto';
       var charsLeft = length - value.toString().length;
       var placeholder = settings.get('placeholder') || '';
-      var readOnly = settings.get('read_only') || !this.options.canWrite;
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
+      var readOnly = settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false;
       var showCharacterCount = this.options.schema.get('length');
       var size = settings.get('size');
       
@@ -78,6 +79,14 @@ define(['core/CustomUIView', 'core/t'], function (UIView, __t) {
         var charsLeft = maxLength - $input.val().length;
         this.$el.find('.char-count').html(charsLeft);
       }
+      
+		if ( /[A-Z]+[^a-z]/g.test($input.val()) ) {
+			this.$el.find('.caps-warn').removeClass('hide');
+		}
+		
+		if ( charsLeft == maxLength || /[a-z]/g.test($input.val()) ) {
+			this.$el.find('.caps-warn').addClass('hide');
+		}
     },
 
     /**
@@ -102,20 +111,6 @@ define(['core/CustomUIView', 'core/t'], function (UIView, __t) {
       }
 
       return true;
-    },
-    
-    checkOnlyCaps: function (event) {
-    	var maxLength = this.options.schema.get('length');
-    	var input = this.$(event.currentTarget);
-    	var charsLeft = maxLength - input.val().length;
-    	
-		if ( /[A-Z]+[^a-z]/g.test(input.val()) ) {
-			this.$el.find('.caps-warn').removeClass('hide');
-		}
-		
-		if ( charsLeft == maxLength || /[a-z]/g.test(input.val()) ) {
-			this.$el.find('.caps-warn').addClass('hide');
-		}
     }
   });
 });

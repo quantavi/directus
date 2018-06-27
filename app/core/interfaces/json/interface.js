@@ -1,4 +1,4 @@
-define(['core/UIView'], function (UIView) {
+define(['core/UIView', 'app'], function (UIView, app) {
   return UIView.extend({
     template: 'json/input',
     events: {
@@ -149,6 +149,8 @@ define(['core/UIView'], function (UIView) {
     },
 
     serialize: function () {
+    	var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+        var status = this.options.model.attributes.status;
       // Beautify JSON
       var value;
 
@@ -165,7 +167,7 @@ define(['core/UIView'], function (UIView) {
         name: this.options.name,
         rows: this.options.settings.get('rows'),
         placeholder: this.options.settings.get('placeholder'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       };
     },
 

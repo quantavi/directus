@@ -105,6 +105,8 @@ define([
       var defaultValue = this.options.schema.get('default_value');
       var placeholderAvailable = Boolean(this.options.settings.get('placeholder')) && this.options.settings.get('placeholder').length > 0;
       var value = this.options.value || defaultValue;
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       if (value instanceof Backbone.Model) {
         value = value.id;
@@ -175,7 +177,7 @@ define([
         allowNull: this.options.settings.get('allow_null') === true,
         placeholder: this.options.settings.get('placeholder'),
         placeholderAvailable: placeholderAvailable,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || statusMapping[status].read_only,
         value: this.value,
         required: this.options.schema.isRequired()
       };

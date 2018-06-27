@@ -1,5 +1,5 @@
 /* global $ */
-define(['underscore', 'core/UIView', 'core/t', 'core/notification'], function (_, UIView, __t, Notification) {
+define(['underscore', 'core/UIView', 'core/t', 'core/notification', 'app'], function (_, UIView, __t, Notification, app) {
   'use strict';
 
   return UIView.extend({
@@ -117,12 +117,14 @@ define(['underscore', 'core/UIView', 'core/t', 'core/notification'], function (_
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       return {
         name: this.options.name,
         value: this.options.value,
         comment: this.options.schema.get('comment'),
         require_confirmation: (this.options.settings.get('require_confirmation') === true),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       };
     },
 

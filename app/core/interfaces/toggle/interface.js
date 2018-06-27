@@ -1,4 +1,4 @@
-define(['underscore', 'utils', 'core/UIView'], function (_, Utils, UIView) {
+define(['underscore', 'utils', 'core/UIView', 'app'], function (_, Utils, UIView, app) {
   return UIView.extend({
     template: 'toggle/input',
 
@@ -23,6 +23,8 @@ define(['underscore', 'utils', 'core/UIView'], function (_, Utils, UIView) {
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var value = this.options.value;
 
       if (value === undefined && this.options.schema.has('default_value')) {
@@ -38,7 +40,7 @@ define(['underscore', 'utils', 'core/UIView'], function (_, Utils, UIView) {
         selected: (value === true),
         label: this.options.settings.get('label'),
         showAsCheckbox: Number(this.options.settings.get('show_as_checkbox')) === 1,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       };
     },
 

@@ -629,17 +629,41 @@ $statusMappingConfiguration = [
     'delete_value' => STATUS_DELETED_NUM
 ];
 
-
 $statusMapping = [
     '*' => $statusMappingConfiguration
 ];
 
-$statusMapping['directus_users'] = array_replace_recursive($statusMappingConfiguration, [
+$statusMapping['*'] = array_replace_recursive($statusMappingConfiguration, [
     'mapping' => [
-        1 => ['name' => __t('Active')],
-        2 => ['name' => __t('Inactive')]
+        0 => ['name' => __t('status_delete')],
+        1 => ['name' => __t('status_publish')],
+        2 => ['name' => __t('status_draft')],
+        3 => ['name' => __t('status_archive')],
+        4 => ['name' => __t('status_disable')]
     ]
 ]);
+
+$statusMapping['directus_users'] = array_replace_recursive($statusMappingConfiguration, [
+    'mapping' => [
+        0 => ['name' => __t('status_delete')],
+        1 => ['name' => __t('status_active')],
+        2 => ['name' => __t('status_inactive')]
+    ]
+]);
+
+// Remove unnecessary status OR in other words: return only Deleted, Active and Inactive
+$statusMapping['directus_users']['mapping'] = array_splice( $statusMapping['directus_users']['mapping'], 0, 3 );
+
+// $statusMapping = [
+//     '*' => $statusMappingConfiguration
+// ];
+
+// $statusMapping['directus_users'] = array_replace_recursive($statusMappingConfiguration, [
+//     'mapping' => [
+//         1 => ['name' => __t('Active')],
+//         2 => ['name' => __t('Inactive')]
+//     ]
+// ]);
 
 foreach ($allTables as $table) {
     $tableName = \Directus\Util\ArrayUtils::get($table, 'schema.id');

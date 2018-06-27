@@ -156,11 +156,13 @@ define([
 
     serialize: function () {
       var value = this.options.value || '';
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       var data = {
         value: value,
         name: this.options.name,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       };
 
       if (this.options.schema.get('type') === 'ALIAS') {

@@ -64,10 +64,12 @@ define([
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       return {
         name: this.options.name,
         value: this.options.value,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         comment: this.options.schema.get('comment'),
         placeholder: this.options.settings.get('placeholder')
       };

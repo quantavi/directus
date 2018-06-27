@@ -1,4 +1,4 @@
-define(['underscore', 'core/UIView', 'core/t', 'core/interfaces/color/lib/color'], function (_, UIView, __t, color) {
+define(['underscore', 'core/UIView', 'core/t', 'core/interfaces/color/lib/color', 'app'], function (_, UIView, __t, color, app) {
   'use strict';
 
   function setPreviewColor(view, color) {
@@ -172,6 +172,8 @@ define(['underscore', 'core/UIView', 'core/t', 'core/interfaces/color/lib/color'
       var input = this.options.settings.get('input');
       var output = this.options.settings.get('output');
       var userPalette = this.options.settings.get('palette') || [];
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       var value = '';
       var outputValue = '';
@@ -200,7 +202,7 @@ define(['underscore', 'core/UIView', 'core/t', 'core/interfaces/color/lib/color'
         name: this.options.name,
         comment: this.options.schema.get('comment'),
         palette: userPalette.length ? userPalette.split(',') : false,
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         input: input,
         output: this.options.settings.get('output'),
         hex: input === 'hex',

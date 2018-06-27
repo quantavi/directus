@@ -1,4 +1,4 @@
-define(['core/UIView'], function (UIView) {
+define(['core/UIView', 'app'], function (UIView, app) {
   'use strict';
 
   return UIView.extend({
@@ -24,13 +24,16 @@ define(['core/UIView'], function (UIView) {
     },
 
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
+
       return {
         value: this.options.value,
         name: this.options.name,
         rows: this.options.settings.get('rows'),
         placeholder: this.options.settings.get('placeholder'),
         comment: this.options.schema.get('comment'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false
       };
     }
   });

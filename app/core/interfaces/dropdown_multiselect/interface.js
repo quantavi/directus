@@ -1,5 +1,5 @@
 /* global _ */
-define(['core/UIView', 'select2'], function (UIView) {
+define(['core/UIView', 'select2', 'app'], function (UIView, s2, app) {
   function parseOptions(options) {
     if (_.isString(options)) {
       try {
@@ -18,6 +18,8 @@ define(['core/UIView', 'select2'], function (UIView) {
       this.model.set(this.name, event.currentTarget.value);
     },
     serialize: function () {
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
       var value = (this.options.value || this.columnSchema.get('default_value') || '').split(',');
       var options = parseOptions(this.options.settings.get('options'));
       var optionsArray = Object.keys(options).map(function (key) {
@@ -34,7 +36,7 @@ define(['core/UIView', 'select2'], function (UIView) {
         comment: this.options.schema.get('comment'),
         readonly: !this.options.canWrite,
         placeholder: this.options.schema.get('placeholder'),
-        readOnly: this.options.settings.get('read_only') || !this.options.canWrite,
+        readOnly: this.options.settings.get('read_only') || !this.options.canWrite || status ? statusMapping[status].read_only : false,
         native: Boolean(Number(this.options.settings.get('use_native_input'))),
         value: value
       };

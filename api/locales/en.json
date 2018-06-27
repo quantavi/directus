@@ -631,6 +631,9 @@
     "status_active": "Active",
     "status_delete": "Delete",
     "status_draft": "Draft",
+    "status_publish": "Publish",
+    "status_archive": "Archive",
+    "status_disable": "Disable",
 
     "admin_settings": "Admin Settings",
     "loading": "Loading Data",

@@ -174,6 +174,9 @@ define([
     serialize: function () {
       var url;
       var link;
+      
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status;
 
       if (this.fileModel.has('name')) {
         if (this.fileModel.isNew()) {
@@ -218,7 +221,8 @@ define([
         comment: this.options.schema.get('comment'),
         allowed_filetypes: this.options.settings.get('allowed_filetypes'),
         model: data,
-        link: link
+        link: link,
+        readOnly: status ? statusMapping[status].read_only : false
       };
 
       return data;
