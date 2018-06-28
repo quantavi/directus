@@ -82,20 +82,21 @@
 		border-color: #3498db;
 	}
 </style>
-
-<div class="select_list-interface">
-	<ul class="gridlist">
-	{{#options}}
-		<li>
-			<input type="radio" name="{{../name}}" value="{{key}}" id="radio-{{../name}}-{{key}}" {{#if selected}}checked{{/if}} {{#if readOnly}}readonly{{/if}}>
-			<label class="radiobuttons" for="radio-{{../name}}-{{key}}">{{value}}</label>
-		</li>
-	{{/options}}
-	{{#if allow_custom}}
-		<li>
-			<input type="radio" name="{{../name}}" {{#if valueIsCustom}}value="{{value}}" checked{{/if}} id="radio-{{../name}}-custom" {{#if selected}}checked{{/if}} {{#if readOnly}}readonly{{/if}}>
-			<label class="radiobuttons" for="radio-{{../name}}-custom"><input type="text" {{#if valueIsCustom}}value="{{value}}"{{/if}} name={{../name}}-custom" placeholder="Other..." {{#if readOnly}}readonly{{/if}} /></label>
-		</li>
-	{{/if}}
-	</ul>
-</div>
+{{#unless readOnly}}
+	<div class="select_list-interface">
+		<ul class="gridlist">
+		{{#options}}
+			<li>
+				<input type="radio" name="{{../name}}" value="{{key}}" id="radio-{{../name}}-{{key}}" {{#if selected}}checked{{/if}} {{#if readOnly}}readonly{{/if}}>
+				<label class="radiobuttons" for="radio-{{../name}}-{{key}}">{{value}}</label>
+			</li>
+		{{/options}}
+		{{#if allow_custom}}
+			<li>
+				<input type="radio" name="{{../name}}" {{#if valueIsCustom}}value="{{value}}" checked{{/if}} id="radio-{{../name}}-custom" {{#if selected}}checked{{/if}} {{#if readOnly}}readonly{{/if}}>
+				<label class="radiobuttons" for="radio-{{../name}}-custom"><input type="text" {{#if valueIsCustom}}value="{{value}}"{{/if}} name={{../name}}-custom" placeholder="Other..." {{#if readOnly}}readonly{{/if}} /></label>
+			</li>
+		{{/if}}
+		</ul>
+	</div>
+{{/unless}}

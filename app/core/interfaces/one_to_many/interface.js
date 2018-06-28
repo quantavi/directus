@@ -195,13 +195,16 @@ define([
 
     serialize: function () {
       var relatedTablePrivilege = app.schemaManager.getPrivileges(this.columnSchema.getRelatedTableName());
+      var statusMapping = app.statusMapping.get('*').toJSON().mapping.toJSON();
+      var status = this.options.model.attributes.status || 1;
 
       return {
         name: this.name,
         tableTitle: this.relatedCollection.table.get('table_name'),
         canEdit: this.canEdit,
         showChooseButton: this.showChooseButton,
-        showAddButton: this.showAddButton && relatedTablePrivilege.canAdd()
+        showAddButton: this.showAddButton && relatedTablePrivilege.canAdd(),
+        readOnly: status ? statusMapping[status].read_only : false
       };
     },
 
