@@ -276,7 +276,7 @@ require(['config', 'polyfills'], function () {
         if (SchemaManager.getPrivileges(table.table_name)) {
           var privileges = SchemaManager.getPrivileges(table.table_name);
 
-          if (table.hidden !== true && privileges.canView() && privileges.canBeListed()) {
+          if ( ( table.hidden !== true || app.users.getCurrentUser().attributes.group.isAdmin() ) && privileges.canView() && privileges.canBeListed() && !table.name.includes("directus_") ) {
             bookmarks.push({
               identifier: table.table_name,
               title: app.capitalize(table.table_name),
