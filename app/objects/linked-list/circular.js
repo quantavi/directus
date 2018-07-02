@@ -42,14 +42,28 @@ define(['underscore', './node', 'exports'], function (_, Node, exports) {
     if (this.headNode === null) {
       this.headNode = this.currentNode = node;
       node.next = this.headNode;
+    } else if (this.size == 2) {
+//      var last = this.headNode;
+//      for (var i = 0; i < this.size; i++) {
+//        last = last.next;
+//      }
+//
+//      last.next = node;
+//      node.next = this.headNode;
+    	this.headNode.next = node;
+    	node.next = this.headNode;
     } else {
-      var last = this.headNode;
-      for (var i = 0; i < this.size; i++) {
-        last = last.next;
-      }
-
-      last.next = node;
-      node.next = this.headNode;
+    	var lastNode = this.headNode;
+    	var canDecrement = true;
+    	for ( var i = 0; i < this.size; i++ ) {
+    		if ( this.size % 2 == 0 && i == this.size - 1 && canDecrement) {
+    			i--;
+    			canDecrement = false;
+    		}
+    		lastNode = lastNode.next;
+    	}
+    	lastNode.next = node;
+    	node.next = this.headNode;
     }
   };
 

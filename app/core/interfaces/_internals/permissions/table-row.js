@@ -39,6 +39,7 @@ define([
     events: {
       'click .js-status-toggle': 'onClickWorkflow',
       'click .js-add-full-permissions': 'addFullPermissions',
+      'click .js-add-group-permissions': 'addGroupPermissions',
       'click .js-remove-full-permissions': 'removeFullPermissions',
       'click .js-permission-toggle': 'togglePermission',
       'click .js-write.choose-column-blacklist': 'editWriteFields',
@@ -65,6 +66,20 @@ define([
       };
 
       this.fullUpdate($row.data('cid'), permissions, {wait: false});
+    },
+    
+    addGroupPermissions: function (event) {
+    	var $button = $(event.currentTarget);
+    	var $row = $button.closest('tr');
+    	var permissions = {
+    			allow_add: 1,
+    			allow_edit: 3,
+    			allow_delete: 3,
+    			allow_alter: 1,
+    			allow_view: 3
+    	};
+    	
+    	this.fullUpdate($row.data('cid'), permissions, {wait: false});
     },
 
     removeFullPermissions: function (event) {
@@ -267,7 +282,8 @@ define([
         case 'view':
         case 'edit':
         case 'delete':
-          value = 2;
+//          value = 2;
+        	value = 3;
           break;
         case 'add':
           value = 1;
@@ -289,7 +305,7 @@ define([
       for (var i = 0; i <= maxValue; i++) {
         range.push(i);
       }
-
+      
       return new CircularLinkedList(range);
     },
 
@@ -312,8 +328,10 @@ define([
           name: 'view',
           maxValue: 2,
           view: model.has('allow_view') && model.get('allow_view') > 0,
-          bigView: model.has('allow_view') && model.get('allow_view') === 2,
+//          bigView: model.has('allow_view') && model.get('allow_view') === 2,
+          full: model.has('allow_view') && model.get('allow_view') === 2,
           onlyMine: model.has('allow_view') && model.get('allow_view') === 1,
+          group: model.has('allow_view') && model.get('allow_view') === 3,
           cannot: (function (model) {
             return !model.has('allow_view') || !(model.get('allow_view') > 0);
           })(model)
@@ -324,6 +342,7 @@ define([
           maxValue: 1,
           title: this.permissionTitle(model),
           add: (model.has('allow_add') && model.get('allow_add') > 0),
+          full: model.has('allow_add') && model.get('allow_add') === 1,
           onlyMine: false, // You either can or cannot add items
           cannot: (function (model) {
             return !model.has('allow_add') || !(model.get('allow_add') > 0);
@@ -334,8 +353,10 @@ define([
           name: 'edit',
           maxValue: 2,
           edit: (model.has('allow_edit') && model.get('allow_edit') > 0),
-          bigEdit: (model.has('allow_edit') && model.get('allow_edit') === 2),
+//          bigEdit: (model.has('allow_edit') && model.get('allow_edit') === 2),
+          full: model.has('allow_edit') && model.get('allow_edit') === 2,
           onlyMine: model.has('allow_edit') && model.get('allow_edit') === 1,
+          group: model.has('allow_edit') && model.get('allow_edit') === 3,
           cannot: (function (model) {
             return !model.has('allow_edit') || !(model.get('allow_edit') > 0);
           })(model)
@@ -345,8 +366,10 @@ define([
           name: 'delete',
           maxValue: 2,
           delete: (model.has('allow_delete') && model.get('allow_delete') > 0),
-          bigDelete: (model.has('allow_delete') && model.get('allow_delete') === 2),
+//          bigDelete: (model.has('allow_delete') && model.get('allow_delete') === 2),
+          full: model.has('allow_delete') && model.get('allow_delete') === 2,
           onlyMine: model.has('allow_delete') && model.get('allow_delete') === 1,
+          group: model.has('allow_delete') && model.get('allow_delete') === 3,
           cannot: (function (model) {
             return !model.has('allow_delete') || !(model.get('allow_delete') > 0);
           })(model)
@@ -369,15 +392,32 @@ define([
       var permission;
 
       permission = 'allow_' + name;
-      if (model.get(permission) > 1) {
-        title = __t('permissions_can_' + name + '_any_items');
-      } else if (model.get(permission) === 1) {
-        title = __t('permissions_can_' + name + '_their_items');
-      } else if (!model.has(permission)) { // eslint-disable-line no-negated-condition
-        title = __t('permissions_can_' + name + '_items');
-      } else {
-        title = __t('permissions_can_not_' + name + '_items');
+      switch(model.get(permission)) {
+      	case 0:
+      		title = __t('permissions_can_not_' + name + '_items');
+      		break;
+      	case 1:
+      		title = __t('permissions_can_' + name + '_their_items');
+      		break;
+      	case 2:
+      		title = __t('permissions_can_' + name + '_any_items');
+      		break;
+      	case 3:
+      		title = __t('permissions_can_' + name + '_group_items');
+      		break;
+      	default:
+      		title = __t('permissions_can_' + name + '_items');
       }
+//      permission = 'allow_' + name;
+//      if (model.get(permission) > 1) {
+//        title = __t('permissions_can_' + name + '_any_items');
+//      } else if (model.get(permission) === 1) {
+//        title = __t('permissions_can_' + name + '_their_items');
+//      } else if (!model.has(permission)) { // eslint-disable-line no-negated-condition
+//        title = __t('permissions_can_' + name + '_items');
+//      } else {
+//        title = __t('permissions_can_not_' + name + '_items');
+//      }
 
       return title;
     },

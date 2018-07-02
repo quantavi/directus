@@ -1,4 +1,7 @@
-<td class="tableName{{#if isSystemTable}} system-table{{/if}}"><div style="display:inline-block">{{table_name}}<span class="privilege-shortcuts"><a class="all js-add-full-permissions">All</a>/<a class="none js-remove-full-permissions">None</a></span></div></td>
+<td class="tableName{{#if isSystemTable}} system-table{{/if}}"><div style="display:inline-block">{{table_name}}<span class="privilege-shortcuts">
+	<a class="all js-add-full-permissions">All</a>/
+	<a class="group js-add-group-permissions">Group</a>/
+	<a class="none js-remove-full-permissions">None</a></span></div></td>
 {{!--
 <td class="permissions-workflow {{#unless supportsWorkflow}} disabled{{/unless}}" title="{{t 'permissions_field_level_permissions'}}">
 	<i class="material-icons vertical-middle js-status-toggle">tune</i>
@@ -21,7 +24,7 @@
 {{#each permissions}}
 <td class="permissions-{{name}} js-permission-name" data-name="{{name}}">
 	<div class="global">
-		<input class="custom-checkbox permission-toggle{{#if onlyMine}} partial{{/if}}" id="check_c_{{ascii name}}_{{../table_name}}" type="checkbox" value="" {{#unless cannot}}checked="checked"{{/unless}}>
+		<input class="custom-checkbox permission-toggle{{#if onlyMine}} partial{{/if}}{{#if group}} group{{/if}}{{#if full}} full{{/if}}" id="check_c_{{ascii name}}_{{../table_name}}" type="checkbox" value="" {{#unless cannot}}checked="checked"{{/unless}}>
 		<label class="js-permission-toggle" for="check_c_{{ascii name}}_{{../table_name}}">
 			<span title="{{title}}"></span>
 		</label>
@@ -29,7 +32,7 @@
 	{{#each statuses}}
 	<div class="workflow js-permission" data-table="{{table_name}}" data-id="{{id}}" data-cid="{{cid}}">
 		<div class="state js-permission-name" data-name="{{name}}">
-			<input class="custom-checkbox permission-toggle{{#if onlyMine}} partial{{/if}}" id="check_c_{{ascii ../name}}_{{statusId}}_{{../../table_name}}" type="checkbox" value="" {{#unless cannot}}checked="checked"{{/unless}}>
+			<input class="custom-checkbox permission-toggle{{#if onlyMine}} partial{{/if}}{{#if groupView}} group{{/if}}{{#if full}} full{{/if}}" id="check_c_{{ascii ../name}}_{{statusId}}_{{../../table_name}}" type="checkbox" value="" {{#unless cannot}}checked="checked"{{/unless}}>
 			<label class="js-permission-toggle" for="check_c_{{ascii ../name}}_{{statusId}}_{{../../table_name}}">
 				<span title="{{title}}"></span>
 			</label>
