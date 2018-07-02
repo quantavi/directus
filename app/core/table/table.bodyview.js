@@ -3,10 +3,11 @@ define([
   'backbone',
   'underscore',
   'sortable',
-  'core/notification'
+  'core/notification',
+  'schema/SchemaManager'
 ],
 
-function(app, Backbone, _, Sortable, Notification) {
+function(app, Backbone, _, Sortable, Notification, SchemaManager) {
 
   'use strict';
 
@@ -61,7 +62,7 @@ function(app, Backbone, _, Sortable, Notification) {
       var statusValues = this.collection.getFilter('status') || table.getStatusVisibleValues().join(',');
       var highlightIds = this.options.highlight || [];
       var collection = this.parentView.getTableCollection();
-
+      
       rowIdentifiers = this.options.rowIdentifiers;
 
       // Filter active/inactive/deleted items
@@ -126,11 +127,33 @@ function(app, Backbone, _, Sortable, Notification) {
         selectable: this.options.selectable,
         showRemoveButton: this.options.showRemoveButton
       };
-
+      
       var blacklist = this.options.blacklist;
 
       tableData.columns = _.difference(tableData.columns, blacklist);
-
+      
+      var privileges = SchemaManager.getPrivileges(this.parentView.options.table.get('table_name'));
+      var blackedRows = [];
+      
+      if ( privileges.groupView() && !app.users.getCurrentUser().attributes.group.isAdmin() ) {
+    	  tableData.rows.forEach( row => {
+    		  if ( !row.model.has('created_by') ) {
+    			  Notification.error( 'Missing part!', 'I\'m unable to finish my work. I can\'t find \'Created by\' column.');
+    			  tableData.rows = [];
+    		  } else {
+    			  var creatorGroup = app.users.get(row.model.get('created_by')).getGroup().get('id');
+    	    	  var currentUserGroup = app.getCurrentGroup().get('id');
+    	    	  if ( creatorGroup != currentUserGroup ) {
+    	    		  blackedRows.push(row);
+    	    	  }
+    		  }
+	      } );
+      }
+      
+      tableData.rows = _.difference(tableData.rows, blackedRows);
+      
+      this.collection.tableDataLength = tableData.rows.length;
+      
       return tableData;
     },
 

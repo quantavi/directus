@@ -645,12 +645,12 @@ input[type="radio"].custom-checkbox {
       input[type="checkbox"].custom-checkbox + label span:hover,
       input[type="radio"].custom-checkbox + label span:hover {
         color: #3498DB; }
-  /* .custom-checkbox input[type="checkbox"]:checked + label span:before,
+  .custom-checkbox input[type="checkbox"]:checked + label span:before,
   .custom-checkbox input[type="radio"]:checked + label span:before,
   input[type="checkbox"].custom-checkbox:checked + label span:before,
   input[type="radio"].custom-checkbox:checked + label span:before {
     content: "check_box";
-    color: #3498DB; } */
+    color: #3498DB; }
   .custom-checkbox input[type="checkbox"]:checked + label span:hover,
   .custom-checkbox input[type="radio"]:checked + label span:hover,
   input[type="checkbox"].custom-checkbox:checked + label span:hover,
