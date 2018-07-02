@@ -73,8 +73,8 @@ define([
     	var $row = $button.closest('tr');
     	var permissions = {
     			allow_add: 1,
-    			allow_edit: 3,
-    			allow_delete: 3,
+    			allow_edit: 2,
+    			allow_delete: 2,
     			allow_alter: 1,
     			allow_view: 3
     	};
@@ -280,10 +280,11 @@ define([
 
       switch (name) {
         case 'view':
+        	value = 3;
+        	break;
         case 'edit':
         case 'delete':
-//          value = 2;
-        	value = 3;
+          value = 2;
           break;
         case 'add':
           value = 1;
@@ -356,7 +357,7 @@ define([
 //          bigEdit: (model.has('allow_edit') && model.get('allow_edit') === 2),
           full: model.has('allow_edit') && model.get('allow_edit') === 2,
           onlyMine: model.has('allow_edit') && model.get('allow_edit') === 1,
-          group: model.has('allow_edit') && model.get('allow_edit') === 3,
+//          group: model.has('allow_edit') && model.get('allow_edit') === 3,
           cannot: (function (model) {
             return !model.has('allow_edit') || !(model.get('allow_edit') > 0);
           })(model)
@@ -369,7 +370,7 @@ define([
 //          bigDelete: (model.has('allow_delete') && model.get('allow_delete') === 2),
           full: model.has('allow_delete') && model.get('allow_delete') === 2,
           onlyMine: model.has('allow_delete') && model.get('allow_delete') === 1,
-          group: model.has('allow_delete') && model.get('allow_delete') === 3,
+//          group: model.has('allow_delete') && model.get('allow_delete') === 3,
           cannot: (function (model) {
             return !model.has('allow_delete') || !(model.get('allow_delete') > 0);
           })(model)
