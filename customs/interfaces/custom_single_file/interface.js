@@ -298,6 +298,8 @@ define([
 			movementAllowed: this.options.settings.get('allow_image_movement'),
 			rotationAllowed: this.options.settings.get('allow_image_rotation'),
 			flippingAllowed: this.options.settings.get('allow_image_flipping'),
+			enableMirroring: this.getRatios().length > 1,
+			enableGroupButtons: this.getRatios().length > 1,
 			ratios: this.getRatios(),
 			globalCrossData: {
 				data: null,
@@ -319,7 +321,6 @@ define([
         readOnly: status ? statusMapping[status].read_only : false,
         cData: cData
       };
-      console.log(data);
       return data;
     },
 
@@ -454,8 +455,10 @@ define([
     	cropper.reset();
     	
     	//Reset options
-    	$('#rotation')[0].value = 0;
-    	$('#rotation-value')[0].innerHTML = 0;
+    	if ( cData.rotationAllowed ) {
+    		$('#rotation')[0].value = 0;
+        	$('#rotation-value')[0].innerHTML = 0;
+    	}
     	
     	//Set new aspect ratio
     	cropper.setAspectRatio( rData[newObject].aspectRatio );
@@ -468,8 +471,10 @@ define([
     		cropper.setCropBoxData( rData[newObject].cropBoxData );
     		
     		//Load options
-    		$('#rotation')[0].value = rData[newObject].imageData.rotate;
-    		$('#rotation-value')[0].innerHTML = rData[newObject].imageData.rotate;
+    		if ( cData.rotationAllowed ) {
+    			$('#rotation')[0].value = rData[newObject].imageData.rotate;
+        		$('#rotation-value')[0].innerHTML = rData[newObject].imageData.rotate;
+    		}
     	}
     	
     	//Check if Origin Mirroring isEnabled
@@ -514,8 +519,10 @@ define([
     
     resetCurrent: function() {
     	cropper.reset();
-    	$('#rotation')[0].value = 0;
-    	$('#rotation-value')[0].innerHTML = 0;
+    	if ( cData.rotationAllowed ) {
+    		$('#rotation')[0].value = 0;
+        	$('#rotation-value')[0].innerHTML = 0;
+    	}
     	Notification.info('Cropper', 'Current image have been reseted to default state');
     },
     

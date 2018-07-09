@@ -65,7 +65,7 @@ define([
 			id: 'allow_shortcuts',
 			ui: 'toggle',
 			type: 'Boolean',
-			comment: 'Are shortcuts available?',
+			comment: 'Are shortcuts available? TODO: ?',
 			default_value: true
 		},
 		{
@@ -86,7 +86,7 @@ define([
 			id: 'allow_image_flipping',
 			ui: 'toggle',
 			type: 'Boolean',
-			comment: 'Can user flip(horizontal and vertical) the image?',
+			comment: 'Can user flip(horizontal and vertical) the image? TODO: ?',
 			default_value: true
 		},
 		{

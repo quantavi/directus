@@ -547,10 +547,10 @@
 		</div>
 	</div>
 	
-	<div class="tmp-output" style="width: 100%;"></div>
-	
 	<div class="button-group settings-group">
+	{{#if cData.enableMirroring}}
 		<button title="Copy the position of the tool to other resolutions" class="button origin-mirroring">Origin Mirroring</button>
+	{{/if}}
 	</div>
 	
 	<div class="other-group">
@@ -566,10 +566,12 @@
 	</div>
 	
 	<div class="button-group">
+	{{#if cData.enableGroupButtons}}
 		<div class="buttons-column all">
 			<button class="button crop-all-and-save">Crop All & Save</button>
 			<button class="button reset-all">Reset All</button>
 		</div>
+	{{/if}}
 		<div class="buttons-column current">
 			<button class="button crop-current-and-save">Crop & Save</button>
 			<button class="button reset-current">Reset</button>
