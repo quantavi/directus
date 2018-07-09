@@ -155,7 +155,8 @@ function getStorageAdapters()
         $storageAdapter['adapter'] => [
             'adapter' => $storageAdapter['adapter'],
             'root_url' => $storageAdapter['root_url'],
-            'root_thumb_url' => $storageAdapter['root_thumb_url']
+            'root_thumb_url' => $storageAdapter['root_thumb_url'],
+            'root_ratios_url' => $storageAdapter['root_ratios_url']
         ]
     ];
 }

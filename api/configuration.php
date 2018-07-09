@@ -1,7 +1,5 @@
 <?php
 
-use Directus\Bootstrap;
-
 /**
  * High priority use case, not super planned out yet.
  * This will be useful in the future as we do a better job organizing our application configuration.
@@ -102,39 +100,8 @@ return [
     ],
 
     'filters' => [
-        // 'table.insert.products:before' => \Directus\Customs\Hooks\BeforeInsertProducts::class
-        'table.select' => function( \Directus\Hook\Payload $payload ) {
-            if (\Directus\Util\StringUtils::endsWith($payload->attribute('tableName'), 'files')) {
-                // Get Payload data
-                $additional = $payload->getData();
-                
-                // Get root_ratios_url
-                $config = Bootstrap::get('config');
-                $fs = $config['filesystem'];
-                $base_ratio_path = $fs['root'].'/ratios';
-                
-                // Array with all ratios to check
-                $r = ['sixteen_nine', 'four_three', 'three_two', 'one_one', 'free'];
-
-                for($i = 0; $i < count($additional); $i++) {
-                    
-                    $name = $additional[$i]['name'];
-                    for($j = 0; $j < count($r); $j++) {
-                        
-                        $file = glob( $base_ratio_path.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*' );
-                        foreach( $file as $filefound ) {
-                            $additional[ $i ][ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
-                        }
-                        
-                    }
-                        
-                }
-                
-                // Update Payload
-                $payload->replace($additional);
-            }
-            return $payload;
-        }
+        //'table.insert.products:before' => \Directus\Customs\Hooks\BeforeInsertProducts::class,
+        'table.select' => \Directus\Customs\Hooks\TableSelect::class
     ],
 
     'feedback' => [
