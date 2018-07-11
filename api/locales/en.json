@@ -665,5 +665,9 @@
     "filtered_items": "Filtered Results",
     "header_new_filter": "Add New Filter",
     
-    "use_all_caps_only_for_acronyms": "Use ALL CAPS only for acronyms"
+    "use_all_caps_only_for_acronyms": "Use ALL CAPS only for acronyms",
+    
+    "directus_tables_status_allow_inheritance_comment": "Allow inheritance of status by childs(items with higher position number than current)",
+    "directus_tables_priority_comment": "Set the position(in tree) of current item\nHigher number represents lower item in hierarchy",
+    "m2o_remove_if_used_comment": "Remove item from list if it's used somewhere"
 }

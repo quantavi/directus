@@ -24,7 +24,7 @@ define([
     	  id: 'remove_item_if_used',
     	  ui: 'toggle',
     	  type: 'Boolean',
-    	  comment: 'Remove item from list if it\'s used somewhere',
+    	  comment: __t('m2o_remove_if_used_comment'),
     	  default_value: true
       },
       {

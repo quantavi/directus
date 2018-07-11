@@ -209,7 +209,7 @@ define([
         }
       }
 
-      if (['many_to_one', 'single_file', 'many_to_one_typeahead'].indexOf(this.selectedUI) > -1) {
+      if (['many_to_one', 'single_file', 'many_to_one_typeahead', 'custom_single_file', 'custom_many_to_one'].indexOf(this.selectedUI) > -1) {
         data.MANYTOONE = true;
         this.selectedRelationshipType = data.selectedRelationshipType = 'MANYTOONE';
         tableRelated = this.getRelatedTable();//this.model.get('related_table');
