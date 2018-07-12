@@ -293,7 +293,7 @@ define([
 		cData = {
 			sourceImageAvailable: fileAvailable && isImage,
 			sourceImageURL: link,
-			croppingAllowed: this.options.settings.get('allow_cropping'),
+			croppingAllowed: this.options.settings.get('allow_cropping') && !(status ? statusMapping[status].read_only : false),
 			shortcutsAllowed: this.options.settings.get('allow_shortcuts'),
 			movementAllowed: this.options.settings.get('allow_image_movement'),
 			rotationAllowed: this.options.settings.get('allow_image_rotation'),
