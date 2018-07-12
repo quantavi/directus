@@ -669,5 +669,6 @@
     
     "directus_tables_status_allow_inheritance_comment": "Allow inheritance of status by childs(items with higher position number than current)",
     "directus_tables_priority_comment": "Set the position(in tree) of current item\nHigher number represents lower item in hierarchy",
-    "m2o_remove_if_used_comment": "Remove item from list if it's used somewhere"
+    "m2o_remove_if_used_comment": "Remove item from list if it's used somewhere",
+    "directus_tables_enabled_debug_mode_comment": "Enabling debug mode will show you in the console more data about what's going on at server side of this function"
 }

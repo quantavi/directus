@@ -50,7 +50,31 @@ define(['./interface', 'core/UIComponent', 'core/t'], function (Input, UICompone
       hidden_input: false,
       sort: 6,
       comment: __t('directus_tables_status_delete_value_comment')
-    }, {
+    },
+    {
+    	id: 'allow_inheritance',
+    	ui: 'toggle',
+    	type: 'Boolean',
+    	default_value: true,
+    	comment: __t('directus_tables_status_allow_inheritance_comment')
+    	
+    },
+    {
+    	id: 'position',
+    	ui: 'numeric',
+    	type: 'TINYINT',
+    	required: true,
+    	comment: __t('directus_tables_priority_comment')
+    },
+    {
+    	id: 'debug',
+    	ui: 'toggle',
+    	type: 'Boolean',
+    	default_value: false,
+    	comment: __t('directus_tables_enabled_debug_mode_comment')
+    	
+    },
+    {
       id: 'status_mapping',
       column_name: 'status_mapping',
       ui: 'json',

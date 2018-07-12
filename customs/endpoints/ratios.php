@@ -72,7 +72,7 @@ $app->post('/ratios', function () {
     }
     
     // Variables for Creating and Saving files
-    $success = []; 
+    $succeed = []; 
     $failed = [];
     $config = Bootstrap::get('config');
     $fileSystem = $config['filesystem'];

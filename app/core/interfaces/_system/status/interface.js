@@ -2,8 +2,9 @@
 define([
   'utils',
   'underscore',
-  'core/UIView'
-], function (Utils, _, UIView) {
+  'core/UIView',
+  'app'
+], function (Utils, _, UIView, app) {
   return UIView.extend({
     template: '_system/status/input',
 
@@ -13,7 +14,52 @@ define([
 
         this.$('input[type=hidden]').val(statusValue);
         this.model.set(this.name, statusValue);
+        
+        if (this.options.settings.get('allow_inheritance')) {
+        	this.legacySubmit();
+        }
       }
+    },
+    
+    legacySubmit: function () {
+    	var rootID = this.model.get('id');
+    	var rootPosition = this.options.settings.get('position');
+    	var status = this.model.get('status');
+    	var tableURL = this.model.getTable().get('url');
+    	var token = app.user.get('token');
+    	var debug = this.options.settings.get('debug');
+    	
+    	var data = {
+    			'rid': rootID,
+    			'position': rootPosition,
+    			'status': status,
+    			'table': tableURL,
+    			'token': token,
+    			'debug': debug
+    	};
+    	
+    	this.sendLegacy(data);
+    	
+//    	console.log(this);
+//    	console.log(app);
+    },
+    
+    sendLegacy: function (data) {
+    	let encoded = JSON.stringify(data);
+    	
+    	// Send data to Legacy Submit Custom Endpoint
+		$.ajax({
+		  method: "POST",
+		  url: "/directus/api/legacySubmit",
+		  async: false,
+		  data: { data: encoded },
+		  success: function(result) {
+			  console.log(result);
+		  },
+		  error: function(error) {
+			  console.error(error);
+		  }
+		});
     },
 
     // NOTE: Force status interface visibility on new items
