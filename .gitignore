@@ -37,3 +37,5 @@ storage
 org.eclipse.wst.validation.prefs
 .project
 .buildpath
+
+/api/config.php
