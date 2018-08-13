@@ -577,7 +577,7 @@ define([
     	// Send data to Ratios Custom Endpoint
 		$.ajax({
 		  method: "POST",
-		  url: "/directus/api/ratios",
+		  url: `${app.PATH}api/ratios`,
 		  data: { data: encoded },
 		  success: function(result) {
 			  Notification.success('Cropper', 'Images have been cropped and uploaded!');
