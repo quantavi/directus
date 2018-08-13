@@ -20,7 +20,7 @@ $is_not_an_object = [];
 
 function getItem($table, $id = null, $token, $args = null) {
     global $server_url;
-    $url = $server_url.$table."/rows/".$id."?preview=1&access_token=".$token.$args;
+    $url = $server_url.DIRECTUS_PATH.$table."/rows/".$id."?preview=1&access_token=".$token.$args;
     
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_TIMEOUT, 3);
@@ -50,7 +50,7 @@ function updateItem($table, $id, $data, $token) {
 }
 
 function getPosition($table, $token) {
-    $directus_columns = json_decode(getItem("/directus/api/1.1/tables/directus_columns", null, $token, "&filters[table_name]=$table&filters[column_name]=status"));
+    $directus_columns = json_decode(getItem("/api/1.1/tables/directus_columns", null, $token, "&filters[table_name]=$table&filters[column_name]=status"));
     foreach ($directus_columns->data as $item) {
         if (isset($item->options)) {
             return json_decode($item->options)->position;
