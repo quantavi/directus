@@ -64,8 +64,8 @@ function submitLegacy($root_item, $root_position, $data) {
     // Debug 0
     if ($data->debug) array_push($stack, $root_item);
     
-    if (!is_object($root_item->data)) {
-        array_push($is_not_an_object, $root_item->data);
+    if (!is_object($root_item)) {
+        array_push($is_not_an_object, $root_item);
         return;
     }
     // 0
