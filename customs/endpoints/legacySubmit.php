@@ -17,10 +17,13 @@ $childs = [];
 $stack = [];
 $fuck_it = [];
 $is_not_an_object = [];
+$urls = [];
 
 function getItem($table, $id = null, $token, $args = null) {
-    global $server_url;
+    global $server_url, $urls;
     $url = $server_url.$table."/rows/".$id."?preview=1&access_token=".$token.$args;
+    
+    array_push($urls, $url);
     
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_TIMEOUT, 3);
@@ -143,7 +146,7 @@ function submitLegacy($root_item, $root_position, $data) {
 }
 
 $app->post('/legacySubmit', function () {
-    global $server_url, $childs_inheriting, $childs_data, $childs, $ignore, $stack, $fuck_it, $is_not_an_object;
+    global $server_url, $childs_inheriting, $childs_data, $childs, $ignore, $stack, $fuck_it, $is_not_an_object, $urls;
     // Get root data
     $data = json_decode($_POST['data']);
     // Get root table, id, position and token
@@ -170,7 +173,8 @@ $app->post('/legacySubmit', function () {
             'childs_available' => $childs_inheriting,
             'stack' => $stack,
             'fuck_it' => $fuck_it,
-            'is_not_an_object' => $is_not_an_object
+            'is_not_an_object' => $is_not_an_object,
+            'urls' => $urls
         ]);
     } else {
         // JSON response
