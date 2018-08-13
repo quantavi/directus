@@ -36,7 +36,7 @@ function getItem($table, $id = null, $token, $args = null) {
 
 function updateItem($table, $id, $data, $token) {
     global $server_url, $urls;
-    $url = $server_url.DIRECTUS_PATH."/api/1.1/tables/".$table."/rows/".$id."?access_token=".$token;
+    $url = $server_url.DIRECTUS_PATH."api/1.1/tables/".$table."/rows/".$id."?access_token=".$token;
     
     array_push($urls, $url);
     
