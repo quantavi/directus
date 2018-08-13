@@ -50,7 +50,7 @@ define([
     	// Send data to Legacy Submit Custom Endpoint
 		$.ajax({
 		  method: "POST",
-		  url: "/directus/api/legacySubmit",
+		  url: `${app.PATH}api/legacySubmit`,
 		  async: false, // When enabled there is loading screen, looks a little smoother
 		  data: { data: encoded },
 		  success: function(result) {
