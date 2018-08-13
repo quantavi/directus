@@ -20,7 +20,7 @@ $is_not_an_object = [];
 
 function getItem($table, $id = null, $token, $args = null) {
     global $server_url;
-    $url = $server_url.DIRECTUS_PATH.$table."/rows/".$id."?preview=1&access_token=".$token.$args;
+    $url = $server_url.$table."/rows/".$id."?preview=1&access_token=".$token.$args;
     
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_TIMEOUT, 3);
