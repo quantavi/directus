@@ -60,7 +60,7 @@ function getPosition($table, $token) {
 function submitLegacy($root_item, $root_position, $data) {
     global $childs_inheriting, $childs_data, $childs, $ignore, $stack;
     // Debug 0
-    if ($data->debug) array_push($stack, $root_item);
+    if ($data->debug) array_push($stack, $root_item->data->image);
     // 0
     foreach ($root_item->data as $child) {
         // 1
