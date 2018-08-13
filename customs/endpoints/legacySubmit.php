@@ -151,7 +151,7 @@ $app->post('/legacySubmit', function () {
     // Get root item
     $root_item = json_decode(getItem($root_table, $root_id, $token)); 
     // Transfer the status to all children recursively
-    submitLegacy($root_item, $root_position, $data);
+//     submitLegacy($root_item, $root_position, $data);
     // If debug mode is enabled return more data about what's goind on
     if ($data->debug) {
         // JSON response
