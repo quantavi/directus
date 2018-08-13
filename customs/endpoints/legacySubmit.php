@@ -23,8 +23,6 @@ function getItem($table, $id = null, $token, $args = null) {
     global $server_url, $urls;
     $url = $server_url.$table."/rows/".$id."?preview=1&access_token=".$token.$args;
     
-    array_push($urls, $url);
-    
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_TIMEOUT, 3);
     curl_setopt($curl, CURLOPT_HTTPGET, 1);
@@ -37,8 +35,10 @@ function getItem($table, $id = null, $token, $args = null) {
 }
 
 function updateItem($table, $id, $data, $token) {
-    global $server_url;
+    global $server_url, $urls;
     $url = $server_url.DIRECTUS_PATH."/api/1.1/tables/".$table."/rows/".$id."?access_token=".$token;
+    
+    array_push($urls, $url);
     
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
