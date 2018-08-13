@@ -62,75 +62,75 @@ function submitLegacy($root_item, $root_position, $data) {
     // Debug 0
     if ($data->debug) array_push($stack, $root_item);
     // 0
-    foreach ($root_item->data as $child) {
-        // 1
-        if (is_object($child)) {
-            // Debug 1
-            if ($data->debug) array_push($childs_inheriting, $child);
-            // If data of the child is an object
-            if (is_object($child->data)) {
-                // Child data
-                $id = $child->data->id;
-                $status = $child->data->status;
-                $table = $child->meta->table;
-                $position = getPosition($table, $data->token);
-                // 2
-                if ($position > $root_position && $status != $data->status && !in_array($table, $ignore)) {
-                    // Debug 2
-                    if ($data->debug) {
-                        array_push($childs_data, [
-                            'id' => $id,
-                            'status' => $status,
-                            'table' => $table,
-                            'position' => $position
-                        ]);
-                    }
-                    // Data to update
-                    $update = [
-                        'status' => $data->status
-                    ];
-                    // Update child and get their childs
-                    $itsChilds = json_decode(updateItem($table, $id, $update, $data->token));
-                    // Debug 3
-                    array_push($childs, $itsChilds);
-                    // Repeat or die
-                    submitLegacy($itsChilds, $position, $data);
-                }
-            } else {
-                // Global data
-                $table = $child->meta->table;
-                $position = getPosition($table, $data->token);
-                // 2`
-                foreach ($child->data as $item) {
-                    // Item data
-                    $id = $item->id;
-                    $status = $item ->status;
-                    // 3
-                    if ($position > $root_position && $status != $data->status && !in_array($table, $ignore)) {
-                        // Debug 2
-                        if ($data->debug) {
-                            array_push($childs_data, [
-                                'id' => $id,
-                                'status' => $status,
-                                'table' => $table,
-                                'position' => $position
-                            ]);
-                        }
-                        // Data to update
-                        $update = [
-                            'status' => $data->status
-                        ];
-                        // Update child and get their childs
-                        $itsChilds = json_decode(updateItem($table, $id, $update, $data->token));
-                        // Debug 3
-                        array_push($childs, $itsChilds);
-                        // Repeat or die
-                        submitLegacy($itsChilds, $position, $data);
-                    }
-                }
-            }
-        }
-    }
+//     foreach ($root_item->data as $child) {
+//         // 1
+//         if (is_object($child)) {
+//             // Debug 1
+//             if ($data->debug) array_push($childs_inheriting, $child);
+//             // If data of the child is an object
+//             if (is_object($child->data)) {
+//                 // Child data
+//                 $id = $child->data->id;
+//                 $status = $child->data->status;
+//                 $table = $child->meta->table;
+//                 $position = getPosition($table, $data->token);
+//                 // 2
+//                 if ($position > $root_position && $status != $data->status && !in_array($table, $ignore)) {
+//                     // Debug 2
+//                     if ($data->debug) {
+//                         array_push($childs_data, [
+//                             'id' => $id,
+//                             'status' => $status,
+//                             'table' => $table,
+//                             'position' => $position
+//                         ]);
+//                     }
+//                     // Data to update
+//                     $update = [
+//                         'status' => $data->status
+//                     ];
+//                     // Update child and get their childs
+//                     $itsChilds = json_decode(updateItem($table, $id, $update, $data->token));
+//                     // Debug 3
+//                     array_push($childs, $itsChilds);
+//                     // Repeat or die
+//                     submitLegacy($itsChilds, $position, $data);
+//                 }
+//             } else {
+//                 // Global data
+//                 $table = $child->meta->table;
+//                 $position = getPosition($table, $data->token);
+//                 // 2`
+//                 foreach ($child->data as $item) {
+//                     // Item data
+//                     $id = $item->id;
+//                     $status = $item ->status;
+//                     // 3
+//                     if ($position > $root_position && $status != $data->status && !in_array($table, $ignore)) {
+//                         // Debug 2
+//                         if ($data->debug) {
+//                             array_push($childs_data, [
+//                                 'id' => $id,
+//                                 'status' => $status,
+//                                 'table' => $table,
+//                                 'position' => $position
+//                             ]);
+//                         }
+//                         // Data to update
+//                         $update = [
+//                             'status' => $data->status
+//                         ];
+//                         // Update child and get their childs
+//                         $itsChilds = json_decode(updateItem($table, $id, $update, $data->token));
+//                         // Debug 3
+//                         array_push($childs, $itsChilds);
+//                         // Repeat or die
+//                         submitLegacy($itsChilds, $position, $data);
+//                     }
+//                 }
+//             }
+//         }
+//     }
 }
 
 $app->post('/legacySubmit', function () {
