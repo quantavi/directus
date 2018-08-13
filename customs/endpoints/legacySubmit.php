@@ -16,6 +16,7 @@ $childs_data = [];
 $childs = [];
 $stack = [];
 $fuck_it = [];
+$is_not_an_object = [];
 
 function getItem($table, $id = null, $token, $args = null) {
     global $server_url;
@@ -59,9 +60,11 @@ function getPosition($table, $token) {
 }
 
 function submitLegacy($root_item, $root_position, $data) {
-    global $childs_inheriting, $childs_data, $childs, $ignore, $stack, $fuck_it;
+    global $childs_inheriting, $childs_data, $childs, $ignore, $stack, $fuck_it, $is_not_an_object;
     // Debug 0
     if ($data->debug) array_push($stack, $root_item);
+    
+    if (!is_object($root_item->data)) array_push($is_not_an_object, $root_item->data);
     // 0
     foreach ($root_item->data as $child) {
         // 1
@@ -137,7 +140,7 @@ function submitLegacy($root_item, $root_position, $data) {
 }
 
 $app->post('/legacySubmit', function () {
-    global $server_url, $childs_inheriting, $childs_data, $childs, $ignore, $stack, $fuck_it;
+    global $server_url, $childs_inheriting, $childs_data, $childs, $ignore, $stack, $fuck_it, $is_not_an_object;
     // Get root data
     $data = json_decode($_POST['data']);
     // Get root table, id, position and token
@@ -163,7 +166,8 @@ $app->post('/legacySubmit', function () {
             'childs_inheriting_data' => $childs_data,
             'childs_available' => $childs_inheriting,
             'stack' => $stack,
-            'fuck_it' => $fuck_it
+            'fuck_it' => $fuck_it,
+            'is_not_an_object' => $is_not_an_object
         ]);
     } else {
         // JSON response
