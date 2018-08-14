@@ -51,7 +51,7 @@ define([
 		$.ajax({
 		  method: "POST",
 		  url: `${app.PATH}api/legacySubmit`,
-		  async: false, // When enabled there is loading screen, looks a little smoother
+		  async: true, // When enabled there is loading screen, looks a little smoother
 		  timeout: 0,
 		  data: { data: encoded },
 		  success: function(result) {
