@@ -149,7 +149,7 @@ define([
       if ( data != null && this.options.settings.get('remove_item_if_used') ) {
     	  $.ajax({
       		  method: "GET",
-      		  url: `${app.PATH}api/1.1/tables/exhibits/rows?preview=1`,
+      		  url: `${app.PATH}${this.model.table.url}/rows?preview=1`,
       		  async: false,
       		  timeout: 0,
       		  success: function(result) {
