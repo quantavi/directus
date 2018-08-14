@@ -144,6 +144,8 @@ define([
       
       this.value = value;
       
+      console.log(this);
+      
       if ( data != null && this.options.settings.get('remove_item_if_used') ) {
     	  $.ajax({
       		  method: "GET",
