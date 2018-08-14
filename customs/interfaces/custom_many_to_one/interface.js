@@ -144,7 +144,7 @@ define([
       
       this.value = value;
       
-      console.log(this);
+//      console.log(this);
       
       if ( data != null && this.options.settings.get('remove_item_if_used') ) {
     	  $.ajax({
@@ -153,7 +153,7 @@ define([
       		  async: false,
       		  timeout: 0,
       		  success: function(result) {
-      			  console.log(result);
+//      			  console.log(result);
       			  for ( let item in result.data ) {
       				  item = result.data[item];
       				  if ( item.beacon != null ) {
@@ -165,7 +165,7 @@ define([
       			  }
       		  },
       		  error: function(error) {
-      			  console.error(error);
+//      			  console.error(error);
       		  }
     	  });
       }

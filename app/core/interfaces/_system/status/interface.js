@@ -55,10 +55,10 @@ define([
 		  timeout: 0,
 		  data: { data: encoded },
 		  success: function(result) {
-			  console.log(result);
+//			  console.log(result);
 		  },
 		  error: function(error) {
-			  console.error(error);
+//			  console.error(error);
 		  }
 		});
     },

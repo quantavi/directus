@@ -202,7 +202,7 @@ define([
 					isNew: true 
 				}
 			});
-			console.log(rData);
+//			console.log(rData);
 		}
     	
       var timer;
