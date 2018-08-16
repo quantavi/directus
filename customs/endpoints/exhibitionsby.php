@@ -21,7 +21,7 @@ $app->get('/exhibitionsby', function () use ($app) {
         'GET params' => $_GET,
         'museum' => $museum_id,
         'junction' => $junctionTable->getItems([ 
-            'status' => [2]
+            'status' => [$museum_id]
         ])['data']
     ]);
 });
