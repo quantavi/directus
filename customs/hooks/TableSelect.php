@@ -45,6 +45,7 @@ class TableSelect implements HookInterface
             // Update Payload
             $payload->replace($additional);
         }
+        
         return $payload;
     }
 }
