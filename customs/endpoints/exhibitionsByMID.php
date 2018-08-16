@@ -7,9 +7,11 @@ use Directus\View\JsonView;
 $app = Bootstrap::get('app');
 
 // Simple GET endpoint example
-$app->get('/exhibitionsByMID', function () {
+$app->get('/exhibitionsByMID', function () use ($app) {
+    
+    $paramValue = $app->request()->params('paramName');
+    
     return JsonView::render([
-        'item 1',
-        'item 2'
+        'params' => $paramValue
     ]);
 });
