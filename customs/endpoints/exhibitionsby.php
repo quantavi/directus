@@ -21,7 +21,7 @@ $app->get('/exhibitionsby', function () use ($app) {
         'GET params' => $_GET,
         'museum' => $museum_id,
         'junction' => $junctionTable->getItems([ 
-            'museum' => [(string)$museum_id]
+            'museum' => intval($museum_id)
         ])['data']
     ]);
 });
