@@ -20,8 +20,6 @@ $app->get('/exhibitionsby', function () use ($app) {
     return JsonView::render([
         'GET params' => $_GET,
         'museum' => $museum_id,
-        'junction' => $junctionTable->getItems([
-            'museum' => $museum_id
-        ])
+        'junction' => $junctionTable->getItems([ 'museum' => [$museum_id] ])['data']
     ]);
 });
