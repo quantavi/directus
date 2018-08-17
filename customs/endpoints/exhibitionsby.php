@@ -146,14 +146,31 @@ $app->get('/exhibitionsby', function () use ($app) {
     
     // Return
     if ($debug) {
-        return JsonView::render([
-            'debug' => $debugTable,
-            'data' => $relatedTables
-        ]);
+        if ($museum_id) {
+            return JsonView::render([
+                'museum_id' => $museum_id,
+                'debug' => $debugTable,
+                'data' => $relatedTables
+            ]);
+        } else if ($exhibition_id) {
+            return JsonView::render([
+                'exhibition_id' => $exhibition_id,
+                'debug' => $debugTable,
+                'data' => $relatedTables
+            ]);
+        }
     } else {
-        return JsonView::render([
-            'data' => $relatedTables
-        ]);
+        if ($museum_id) {
+            return JsonView::render([
+                'museum_id' => $museum_id,
+                'data' => $relatedTables
+            ]);
+        } else if ($exhibition_id) {
+            return JsonView::render([
+                'exhibition_id' => $exhibition_id,
+                'data' => $relatedTables
+            ]);
+        }
     }
     
     
