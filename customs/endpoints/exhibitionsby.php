@@ -123,6 +123,8 @@ $app->get('/exhibitionsby', function () use ($app) {
                     $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors');
                 }
                 
+                $entry['museum_id'] = $museum_id;
+                
                 array_push($relatedTables, $entry);
             }
         }
@@ -141,36 +143,21 @@ $app->get('/exhibitionsby', function () use ($app) {
             $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors');
         }
         
+        $entry['exhibition_id'] = $exhibition_id;
+        
         array_push($relatedTables, $entry);
     }
     
     // Return
     if ($debug) {
-        if ($museum_id) {
-            return JsonView::render([
-                'museum_id' => $museum_id,
-                'debug' => $debugTable,
-                'data' => $relatedTables
-            ]);
-        } else if ($exhibition_id) {
-            return JsonView::render([
-                'exhibition_id' => $exhibition_id,
-                'debug' => $debugTable,
-                'data' => $relatedTables
-            ]);
-        }
+        return JsonView::render([
+            'debug' => $debugTable,
+            'data' => $relatedTables
+        ]);
     } else {
-        if ($museum_id) {
-            return JsonView::render([
-                'museum_id' => $museum_id,
-                'data' => $relatedTables
-            ]);
-        } else if ($exhibition_id) {
-            return JsonView::render([
-                'exhibition_id' => $exhibition_id,
-                'data' => $relatedTables
-            ]);
-        }
+        return JsonView::render([
+            'data' => $relatedTables            
+        ]);
     }
     
     
