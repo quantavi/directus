@@ -90,6 +90,16 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
     return $object;
 }
 
+function convertToNumeric($itemGroup) {
+    foreach ($itemGroup as $key) {
+        $value = $itemGroup[$key];
+        if (is_numeric($value)) {
+            $itemGroup[$key] = intval($value);
+        }
+    }
+    return $itemGroup;
+}
+
 // Simple GET endpoint example
 $app->get('/exhibitionsby', function () use ($app) {
     global $debugTable;
@@ -164,6 +174,9 @@ $app->get('/exhibitionsby', function () use ($app) {
                     }
                     $item['translations'] = $filteredTable;
                 }
+                
+                $item['exhibition_id'] = $exhibition_id;
+                
                 array_push($relatedTables, $item);
             }
             
@@ -183,7 +196,7 @@ $app->get('/exhibitionsby', function () use ($app) {
             }
             
             $entry['exhibition_id'] = $exhibition_id;
-            
+
             array_push($relatedTables, $entry);
         }
     }
@@ -196,7 +209,7 @@ $app->get('/exhibitionsby', function () use ($app) {
         ]);
     } else {
         return JsonView::render([
-            'data' => $relatedTables            
+            'data' => $relatedTables
         ]);
     }
     
