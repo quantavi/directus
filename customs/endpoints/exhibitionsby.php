@@ -10,9 +10,9 @@ $app = Bootstrap::get('app');
 // Debug Table
 $debugTable = [];
 
-function debugAdd($name, $table) {
+function debugAdd($item) {
     global $debugTable;
-    array_push($debugTable, $table);
+    array_push($debugTable, $item);
 }
 
 function getTableItems($table, $params = [], $group = 'data') {
@@ -99,6 +99,9 @@ $app->get('/exhibitionsby', function () use ($app) {
     $exhibition_id = $app->request()->params('id');
     $depth = $app->request()->params('depth') ? $app->request()->params('depth') : 0;
     $debug = $app->request()->params('debug') || 0;
+    $authorsonly = $app->request()->params('authorsonly') || 0;
+    
+    debugAdd($authorsonly);
     
     if ($museum_id && $exhibition_id) {
         return JsonView::render([
@@ -140,23 +143,49 @@ $app->get('/exhibitionsby', function () use ($app) {
             }
         }
     } else if ($exhibition_id && !$museum_id) {
-        $entry = getExhibitionBy('id', $exhibition_id);
-        $entry['image'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
-        
-        // Add Descriptions and Authors
-        if ($depth >= 1) {
-            // Add Descriptions
-            $translationsTable = getTableItems('exhibition_translations');
-            $entry['translations'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+        if ($authorsonly) {
+            $temp_entry = getExhibitionBy('id', $exhibition_id);
             
-            // Add Authors
+            // Add Only Authors
             $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-            $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+            $filteredItems = filterBy($junctionAuthorsExhibitionsTable, 'exhibition', $temp_entry['id'], 'id');
+            foreach ($filteredItems as $item) {
+                $item = getItemBy('authors', 'id', $item);
+                if ($item['photo']) {
+                    $item['photo'] = addImagesDataIfExistTo(getFileBy('id', $item['photo']));
+                }
+                if ($depth == 2) {
+                    $tableName = "author_translations";
+                    $filteredTable = [];
+                    foreach (getTableItems($tableName) as $translation) {
+                        if ($translation['author'] == $item['id']) {
+                            array_push($filteredTable, $translation);
+                        }
+                    }
+                    $item['translations'] = $filteredTable;
+                }
+                array_push($relatedTables, $item);
+            }
+            
+        } else {
+            $entry = getExhibitionBy('id', $exhibition_id);
+            $entry['image'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+            
+            // Add Descriptions and Authors
+            if ($depth >= 1) {
+                // Add Descriptions
+                $translationsTable = getTableItems('exhibition_translations');
+                $entry['translations'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                
+                // Add Authors
+                $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
+                $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+            }
+            
+            $entry['exhibition_id'] = $exhibition_id;
+            
+            array_push($relatedTables, $entry);
         }
-        
-        $entry['exhibition_id'] = $exhibition_id;
-        
-        array_push($relatedTables, $entry);
     }
     
     // Return
