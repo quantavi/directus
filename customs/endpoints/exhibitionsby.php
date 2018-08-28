@@ -29,13 +29,24 @@ function filterBy($rawData, $compare, $to, $return = null) {
     return $filtered;
 }
 
-function getFilteredItems($tableToParse, $compare, $to, $connectBy = null, $additionalTable) {
+function getFilteredItems($tableToParse, $compare, $to, $connectBy = null, $additionalTable, $depth = 0) {
     $filteredItemsArray = [];
     $filteredItems = filterBy($tableToParse, $compare, $to, $connectBy);
     foreach ($filteredItems as $item) {
         $item = getItemBy($additionalTable, $connectBy != null ? $connectBy : 'id', $item);
         if ($item['photo']) {
             $item['photo'] = addImagesDataIfExistTo(getFileBy('id', $item['photo']));
+        }
+        if ($depth == 2) {
+            $table = substr($additionalTable, 0, strlen($additionalTable) - 1);
+            $tableName = "{$table}_translations";
+            $filteredTable = [];
+            foreach (getTableItems($tableName) as $translation) {
+                if ($translation['author'] == $item['id']) {
+                    array_push($filteredTable, $translation);
+                }
+            }
+            $item['translations'] = $filteredTable;
         }
         array_push($filteredItemsArray, $item);
     }
@@ -86,7 +97,7 @@ $app->get('/exhibitionsby', function () use ($app) {
     // GET params
     $museum_id = $app->request()->params('museum');
     $exhibition_id = $app->request()->params('id');
-    $depth = $app->request()->params('depth') || 0;
+    $depth = $app->request()->params('depth') ? $app->request()->params('depth') : 0;
     $debug = $app->request()->params('debug') || 0;
     
     if ($museum_id && $exhibition_id) {
@@ -120,7 +131,7 @@ $app->get('/exhibitionsby', function () use ($app) {
                     
                     // Add Authors
                     $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-                    $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors');
+                    $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
                 }
                 
                 $entry['museum_id'] = $museum_id;
@@ -140,7 +151,7 @@ $app->get('/exhibitionsby', function () use ($app) {
             
             // Add Authors
             $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-            $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors');
+            $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
         }
         
         $entry['exhibition_id'] = $exhibition_id;
