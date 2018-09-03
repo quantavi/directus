@@ -134,17 +134,23 @@ $app->get('/exhibitionsby', function () use ($app) {
                 array_push($relatedTablesIds, $data['id']);
                 
                 $entry = getExhibitionBy('id', $data['id']);
-                $entry['image'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+                $tmp = [];
+                $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+                $entry['image'] = $tmp;
                 
                 // Add Descriptions and Authors
                 if ($depth >= 1) {
                     // Add Descriptions
                     $translationsTable = getTableItems('exhibition_translations');
-                    $entry['translations'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                    $tmp = [];
+                    $tmp['data'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                    $entry['translations'] = $tmp;
                     
                     // Add Authors
                     $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-                    $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+                    $tmp = [];
+                    $tmp['data'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+                    $entry['authors'] = $tmp;
                 }
                 
                 $entry['museum_id'] = $museum_id;
@@ -162,16 +168,20 @@ $app->get('/exhibitionsby', function () use ($app) {
             foreach ($filteredItems as $item) {
                 $item = getItemBy('authors', 'id', $item);
                 if ($item['photo']) {
-                    $item['photo'] = addImagesDataIfExistTo(getFileBy('id', $item['photo']));
+                    $tmp = [];
+                    $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $item['photo']));
+                    $item['photo'] = $tmp;
                 }
                 if ($depth == 2) {
                     $tableName = "author_translations";
                     $filteredTable = [];
+                    $data = [];
                     foreach (getTableItems($tableName) as $translation) {
                         if ($translation['author'] == $item['id']) {
-                            array_push($filteredTable, $translation);
+                            array_push($data, $translation);
                         }
                     }
+                    $filteredTable['data'] = $data;
                     $item['translations'] = $filteredTable;
                 }
                 
@@ -182,17 +192,23 @@ $app->get('/exhibitionsby', function () use ($app) {
             
         } else {
             $entry = getExhibitionBy('id', $exhibition_id);
-            $entry['image'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+            $tmp = [];
+            $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+            $entry['image'] = $tmp;
             
             // Add Descriptions and Authors
             if ($depth >= 1) {
                 // Add Descriptions
                 $translationsTable = getTableItems('exhibition_translations');
-                $entry['translations'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                $tmp = [];
+                $tmp['data'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                $entry['translations'] = $tmp;
                 
                 // Add Authors
                 $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-                $entry['authors'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+                $tmp = [];
+                $tmp['data'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+                $entry['authors'] = $tmp;
             }
             
             $entry['exhibition_id'] = $exhibition_id;
