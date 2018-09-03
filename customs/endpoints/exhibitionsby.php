@@ -110,8 +110,9 @@ $app->get('/exhibitionsby', function () use ($app) {
     $depth = $app->request()->params('depth') ? $app->request()->params('depth') : 0;
     $debug = $app->request()->params('debug') || 0;
     $authorsonly = $app->request()->params('authorsonly') || 0;
+    $exhibitsonly = $app->request()->params('exhibitsonly') || 0;
     
-    debugAdd($authorsonly);
+    debugAdd($exhibitsonly);
     
     if ($museum_id && $exhibition_id) {
         return JsonView::render([
@@ -186,6 +187,41 @@ $app->get('/exhibitionsby', function () use ($app) {
                 }
                 
                 $item['exhibition_id'] = $exhibition_id;
+                
+                array_push($relatedTables, $item);
+            }
+            
+        } else if ($exhibitsonly) {
+            $temp_entry = getExhibitionBy('id', $exhibition_id);
+            
+            // Add Exhibits
+            $junctionExhibitExhibitionsTable = getTableItems('junction_exhibit_to_exhibition');
+            $filteredItems = filterBy($junctionExhibitExhibitionsTable, 'exhibition', $temp_entry['id'], 'id');
+            
+            foreach ($filteredItems as $item) {
+                $item = getItemBy('exhibits', 'id', $item);
+                
+                if ($depth >= 1) {
+                    // Add Images
+                    for ($i = 1; $i <= 3; $i++) {
+                        $tmp = [];
+                        $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $item["image_$i"]));
+                        $item["image_$i"] = $tmp;
+                    }
+                }
+                
+                // Add Descriptions
+                if ($depth >= 2) {
+
+                    // Add Descriptions
+                    $translationsTable = getTableItems('exhibit_translations');
+                    $tmp = [];
+                    $tmp['data'] = filterBy($translationsTable, 'exhibit', $item['id']);
+                    $item['translations'] = $tmp;
+                }
+                
+                $item['id'] = intval($item['id']);
+                $item['status'] = intval($item['status']);
                 
                 array_push($relatedTables, $item);
             }
