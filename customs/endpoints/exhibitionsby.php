@@ -231,6 +231,8 @@ $app->get('/exhibitionsby', function () use ($app) {
                 $item['id'] = intval($item['id']);
                 $item['status'] = intval($item['status']);
                 
+                $item['exhibition_id'] = $exhibition_id;
+                
                 array_push($relatedTables, $item);
             }
             
