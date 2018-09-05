@@ -210,7 +210,7 @@ $app->get('/exhibitionsby', function () use ($app) {
                     }
                 }
                 
-                // Add Descriptions
+                // Add Descriptions and Extend Beacon
                 if ($depth >= 2) {
 
                     // Add Descriptions
@@ -218,6 +218,14 @@ $app->get('/exhibitionsby', function () use ($app) {
                     $tmp = [];
                     $tmp['data'] = filterBy($translationsTable, 'exhibit', $item['id']);
                     $item['translations'] = $tmp;
+                    
+                    // Extend Beacon
+                    if ($item['beacon'] != null) {
+                        $beaconsTable = getTableItems('beacons');
+                        $tmp = [];
+                        $tmp['data'] = filterBy($beaconsTable, 'id', $item['beacon']);
+                        $item['beacon'] = $tmp;
+                    }
                 }
                 
                 $item['id'] = intval($item['id']);
