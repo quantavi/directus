@@ -26,7 +26,7 @@ if (!function_exists('getDatabaseConfig')) {
             'engine' => defined('DB_ENGINE') ? DB_ENGINE : 'InnoDB',
             'charset' => defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4',
             'directory' => 'schema',
-            //'socket' => '/var/run/mysqld/mysqld.sock'
+            'socket' => '/var/run/mysqld/mysqld.sock'
         ];
 
         if ($config) {
