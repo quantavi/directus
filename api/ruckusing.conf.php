@@ -41,6 +41,7 @@ if (!function_exists('getDatabaseConfig')) {
                     'port' => $db['port'],
                     'database' => $db['name'],
                     'user' => $db['user'],
+                    'socket' => $db['socket'],
                     'password' => $db['pass'],
                     'charset' => $db['charset'],
                     'engine' => $db['engine'],
