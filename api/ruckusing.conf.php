@@ -25,8 +25,8 @@ if (!function_exists('getDatabaseConfig')) {
             'prefix' => defined('DB_PREFIX') ? DB_PREFIX : '',
             'engine' => defined('DB_ENGINE') ? DB_ENGINE : 'InnoDB',
             'charset' => defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4',
-            'directory' => 'schema',
-            'socket' => '/tmp/mysql.sock'
+            'directory' => 'schema'
+//            'socket' => '/tmp/mysql.sock'
         ];
 
         if ($config) {
@@ -41,7 +41,7 @@ if (!function_exists('getDatabaseConfig')) {
                     'port' => $db['port'],
                     'database' => $db['name'],
                     'user' => $db['user'],
-                    'socket' => $db['socket'],
+//                    'socket' => $db['socket'],
                     'password' => $db['pass'],
                     'charset' => $db['charset'],
                     'engine' => $db['engine'],

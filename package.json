@@ -16,8 +16,14 @@
     "url": "https://github.com/directus/directus/issues"
   },
   "xo": {
-    "envs": ["amd", "browser"],
-    "ignores": ["assets", "vendor"],
+    "envs": [
+      "amd",
+      "browser"
+    ],
+    "ignores": [
+      "assets",
+      "vendor"
+    ],
     "space": true,
     "esnext": false,
     "rules": {
