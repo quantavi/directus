@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('America/New_York');
 
 // Do not change, only supporting one API version
@@ -15,22 +16,19 @@ define('DIRECTUS_ENV', 'development');
 
 // MySQL Settings
 define('DB_TYPE', 'mysql');
-define('DB_HOST', 'mysql');
-define('DB_PORT', 8889);
-define('DB_NAME', 'artemFromDev');
+define('DB_HOST', 'localhost');
+define('DB_PORT', 3306);
+define('DB_NAME', 'directus');
 define('DB_USER', 'root');
-define('DB_PASSWORD', 'root');
+define('DB_PASSWORD', 'password');
 define('DB_PREFIX', '');
-define('DB_ENGINE', 'InnoDB');
-define('DB_CHARSET', 'utf8mb4');
 
 define('DB_HOST_SLAVE', ''); //Leave undefined to fall back on master
 define('DB_USER_SLAVE', '');
 define('DB_PASSWORD_SLAVE', '');
 
 // Url path to Directus
-define('DIRECTUS_PATH', '/directus');
-
+define('DIRECTUS_PATH', '/');
 
 $host = 'www.example.com'; // (Make it work for CLI)
 if (isset($_SERVER['SERVER_NAME'])) {
@@ -50,7 +48,7 @@ define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/..'));
 define('MEMCACHED_SERVER', '127.0.0.1');
 
 // Namespaced the memcache keys so branches/databases to not collide
-//options are prod, staging, testing, development
+// options are prod, staging, testing, development
 define('MEMCACHED_ENV_NAMESPACE', 'staging');
 
 define('STATUS_DELETED_NUM', 0);
