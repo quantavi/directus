@@ -31,6 +31,7 @@ class TableSelect implements HookInterface
             for($i = 0; $i < count($additional); $i++) {
                 
                 $name = $additional[$i]['name'];
+                $additional[$i]['URL'] = $base_ratio_path;
                 for($j = 0; $j < count($r); $j++) {
                     
                     $file = glob( $base_ratio_path.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*' );
