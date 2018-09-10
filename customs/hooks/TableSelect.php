@@ -23,7 +23,7 @@ class TableSelect implements HookInterface
             // Get root_ratios_url
             $config = Bootstrap::get('config');
             $fs = $config['filesystem'];
-            $base_ratio_path = $fs['root_url'].'/ratios';
+            $base_ratio_path = $fs['root'].'/ratios';
             
             // Array with all ratios to check
             $r = ['sixteen_nine', 'four_three', 'three_two', 'one_one', 'free'];
@@ -31,12 +31,11 @@ class TableSelect implements HookInterface
             for($i = 0; $i < count($additional); $i++) {
                 
                 $name = $additional[$i]['name'];
-                $additional[$i]['URL'] = $base_ratio_path;
                 for($j = 0; $j < count($r); $j++) {
                     
                     $file = glob( $base_ratio_path.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*' );
                     foreach( $file as $filefound ) {
-                        $additional[ $i ][ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
+                        $additional[ $i ][ $r[ $j ].'_url' ] = preg_replace("/(\/var\/www\/html\/)[a-z]{8}/", "", $filefound);
                     }
                     
                 }
