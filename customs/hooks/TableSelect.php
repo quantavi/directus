@@ -23,7 +23,7 @@ class TableSelect implements HookInterface
             // Get root_ratios_url
             $config = Bootstrap::get('config');
             $fs = $config['filesystem'];
-            $base_ratio_path = $fs['root'].'/ratios';
+            $base_ratio_path = $fs['root_url'].'/ratios';
             
             // Array with all ratios to check
             $r = ['sixteen_nine', 'four_three', 'three_two', 'one_one', 'free'];
