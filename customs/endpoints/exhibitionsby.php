@@ -111,6 +111,7 @@ $app->get('/exhibitionsby', function () use ($app) {
     $debug = $app->request()->params('debug') || 0;
     $authorsonly = $app->request()->params('authorsonly') || 0;
     $exhibitsonly = $app->request()->params('exhibitsonly') || 0;
+    $status = $app->request()->params('status') ? $app->request()->params('status') : 0;
     
     debugAdd($exhibitsonly);
     
@@ -135,28 +136,31 @@ $app->get('/exhibitionsby', function () use ($app) {
                 array_push($relatedTablesIds, $data['id']);
                 
                 $entry = getExhibitionBy('id', $data['id']);
-                $tmp = [];
-                $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
-                $entry['image'] = $tmp;
                 
-                // Add Descriptions and Authors
-                if ($depth >= 1) {
-                    // Add Descriptions
-                    $translationsTable = getTableItems('exhibition_translations');
+                if ($entry['status'] == $status) {
                     $tmp = [];
-                    $tmp['data'] = filterBy($translationsTable, 'exhibition', $entry['id']);
-                    $entry['translations'] = $tmp;
+                    $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+                    $entry['image'] = $tmp;
                     
-                    // Add Authors
-                    $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-                    $tmp = [];
-                    $tmp['data'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
-                    $entry['authors'] = $tmp;
+                    // Add Descriptions and Authors
+                    if ($depth >= 1) {
+                        // Add Descriptions
+                        $translationsTable = getTableItems('exhibition_translations');
+                        $tmp = [];
+                        $tmp['data'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                        $entry['translations'] = $tmp;
+                        
+                        // Add Authors
+                        $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
+                        $tmp = [];
+                        $tmp['data'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+                        $entry['authors'] = $tmp;
+                    }
+                    
+                    $entry['museum_id'] = $museum_id;
+                    
+                    array_push($relatedTables, $entry);
                 }
-                
-                $entry['museum_id'] = $museum_id;
-                
-                array_push($relatedTables, $entry);
             }
         }
     } else if ($exhibition_id && !$museum_id) {
