@@ -81,6 +81,9 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
     for($j = 0; $j < count($r); $j++) {
         
         $file = glob( $root_ratios_url.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*' );
+        
+        $object[ $r[ $j ].'_url' ] = $object['url'];
+        
         foreach( $file as $filefound ) {
             $object[ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
         }
