@@ -84,6 +84,10 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
         
         $object[ $r[ $j ].'_url' ] = $object['url'];
         
+        $object[ $r[ $j ].'_url' ] = $root_ratios_url.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*'; 
+        
+        // TODO: Cropped images don't show
+        
         foreach( $file as $filefound ) {
             $object[ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
         }
