@@ -146,6 +146,8 @@ define([
       
 //      console.log(this);
       
+//      var self = this;
+      
       if ( data != null && this.options.settings.get('remove_item_if_used') ) {
     	  $.ajax({
       		  method: "GET",
@@ -153,14 +155,14 @@ define([
       		  async: false,
       		  timeout: 0,
       		  success: function(result) {
-//      			  console.log(result);
+//      			  console.log(data);
       			  for ( let item in result.data ) {
       				  item = result.data[item];
       				  if ( item.beacon != null ) {
       					  let index = data.findIndex( checked => {
-      						  return item.beacon.data.tag == checked.name;
+      						  return item.beacon.data.tag == checked.name && !checked.selected;
       					  } );
-      					  if ( index >= 0 ) data.splice( index, 1 );
+      					  if ( index >= 0 && (item.status == 1 || item.status == 2) ) data.splice( index, 1 );
       				  }
       			  }
       		  },
