@@ -87,7 +87,7 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
         $object[ $r[ $j ].'_url' ] = $object['url'];
         
         foreach( $file as $filefound ) {
-            $object[ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
+            $object[ $r[ $j ].'_url' ] = str_replace( '/(\/var\/www\/html\/)[a-z]{8}/', '', $filefound );
         }
         
     }
