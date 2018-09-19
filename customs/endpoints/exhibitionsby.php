@@ -70,7 +70,7 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
     $config = Bootstrap::get('config');
     $fs = $config['filesystem'];
     $root_url = $fs['root_url'];
-    $root_ratios_url = $fs['root_ratios_url'];
+    $base_ratio_path = $fs['root'].'/ratios';
     
     // Array with all ratios to check
     $r = ['sixteen_nine', 'four_three', 'three_two', 'one_one', 'free'];
@@ -80,13 +80,11 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
     
     for($j = 0; $j < count($r); $j++) {
         
-        $file = glob( $root_ratios_url.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*' );
+        $path = $base_ratio_path.'/'.$r[ $j ].'/'.substr($name, 0, strrpos($name, ".")).'*';
+        
+        $file = glob( $path );
         
         $object[ $r[ $j ].'_url' ] = $object['url'];
-        
-        $object[ $r[ $j ].'_url' ] = $root_ratios_url.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*'; 
-        
-        // TODO: Cropped images don't show
         
         foreach( $file as $filefound ) {
             $object[ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
