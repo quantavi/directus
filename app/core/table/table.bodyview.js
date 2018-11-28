@@ -3,10 +3,11 @@ define([
   'backbone',
   'underscore',
   'sortable',
-  'core/notification'
+  'core/notification',
+  'schema/SchemaManager'
 ],
 
-function(app, Backbone, _, Sortable, Notification) {
+function(app, Backbone, _, Sortable, Notification, SchemaManager) {
 
   'use strict';
 
@@ -61,7 +62,7 @@ function(app, Backbone, _, Sortable, Notification) {
       var statusValues = this.collection.getFilter('status') || table.getStatusVisibleValues().join(',');
       var highlightIds = this.options.highlight || [];
       var collection = this.parentView.getTableCollection();
-
+      
       rowIdentifiers = this.options.rowIdentifiers;
 
       // Filter active/inactive/deleted items
@@ -126,87 +127,39 @@ function(app, Backbone, _, Sortable, Notification) {
         selectable: this.options.selectable,
         showRemoveButton: this.options.showRemoveButton
       };
-
+      
       var blacklist = this.options.blacklist;
 
       tableData.columns = _.difference(tableData.columns, blacklist);
-// ===========================START===========================
-      var prohibited = 0;
       
-//      	console.log( app.users.getCurrentUser().getGroup() );
+      var privileges = SchemaManager.getPrivileges(this.parentView.options.table.get('table_name'));
+      var blackedRows = [];
       
-      var currentUser = app.users.getCurrentUser();
-      var currentUserGroupID = currentUser.getGroup().id;
-      
-      if ( currentUser.attributes.group.isAdmin() ) {
-    	  
-//    	  console.log( "User in Admin group!" );
-    	  
-      } else {
-    	  
-//    	  console.log( "User in Public group!" );
-//    	  console.log( tableData.rows );
-      tableData.rows.forEach( function( row ) {
-    	  // !WARNING! 
-    	  // This is sensive/fragile element, because the last part of path("row.model.attributes.*")
-    	  // depends on column name. 
-    	  // So, every table need to have at least one same name column, and last part of path must be the same.
-    	  let cid = row.model.attributes.maker;
-    	  	
-    	  function isInGroup() {
-      		  for ( let userid in app.groups.models[0].attributes.users._byId ) {
-      			  if ( cid == userid || app.users.getCurrentUser().attributes.group.id == 1 ) {
-      				  return true;
-      			  }
-      		  }
-      		  return false;
-      	  }
-    	  
-    	  let rows = tableData.rows;
-    	  
-    	  for ( let i = 0; i < rows.length; i++ ) {
-    		  
-    		  let row = rows[i];
-    		  let itemCreatorID = row.model.attributes.user_created;
-    		  let currentActiveGroup = app.groups._byId;
-//    		  let itemCreatorGroupID = row.model.privileges.attributes.group_id; // Grupa aktualnie zalogowanego
-    		  
-//    		  console.log( row );
-//    		  console.log( "ID Grupy, której członek utworzył item " + row.index + " to " + itemCreatorGroupID );
-//    		  console.log( currentActiveGroup );
-    		  
-    		  let flag = false;
-    		  
-    		  for ( let user in currentActiveGroup ) {
-    			  
-    			  console.log( "User: " + user );
-    			  console.log( "Item Creator ID: " + itemCreatorID );
-    			  
-    			  if ( itemCreatorID == user ) {
-    				  
-    				  console.log( "User " + itemCreatorID + " jest w grupie z " + currentUser.id );
-    				  flag = true;
-    				  
-    			  }
-    			  
-    		  }
-    		  
-    		  if ( !flag ) {
-    			  
-    			  console.log( "User " + itemCreatorID + " nie jest w grupie z " + currentUser.id );
-    			  console.log( "Usuwam item nr " + row.index );
-    			  
-    			  rows.splice( rows.indexOf( row ), 1 );
-    			  prohibited++;
-    			  
-    		  }
-    		  
-    	  }  
-      	});
+      if ( privileges.groupView() && !app.users.getCurrentUser().attributes.group.isAdmin() ) {
+    	  tableData.rows.forEach( row => {
+    		  if ( row.model.has('created_by') ) {
+                  var creatorGroup = app.users.get(row.model.get('created_by')).getGroup().get('id');
+                  var currentUserGroup = app.getCurrentGroup().get('id');
+                  if ( creatorGroup != currentUserGroup ) {
+                      blackedRows.push(row);
+                  }
+              } else if ( row.model.has('user_created') ) {
+                  var creatorGroup = app.users.get(row.model.get('user_created')).getGroup().get('id');
+                  var currentUserGroup = app.getCurrentGroup().get('id');
+                  if ( creatorGroup != currentUserGroup ) {
+                      blackedRows.push(row);
+                  }
+              } else {
+                  Notification.error( 'Missing part!', 'I\'m unable to finish my work. I can\'t find \"Created by\" column. Please make sure that this column is enabled in options menu placed in top-right corner of your screen.');
+                  tableData.rows = [];
+              }
+	      } );
       }
       
-      this.collection.prohibited = prohibited;
-// ===========================STOP============================
+      tableData.rows = _.difference(tableData.rows, blackedRows);
+      
+      this.collection.tableDataLength = tableData.rows.length;
+      
       return tableData;
     },
 
