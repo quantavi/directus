@@ -138,19 +138,32 @@ function(app, Backbone, _, Sortable, Notification, SchemaManager) {
       if ( privileges.groupView() && !app.users.getCurrentUser().attributes.group.isAdmin() ) {
     	  tableData.rows.forEach( row => {
               if ( row.model.has('created_by') ) {
-                  var creatorGroup = app.users.get(row.model.get('created_by')).getGroup().get('id');
-                  var currentUserGroup = app.getCurrentGroup().get('id');
+                  let creatorGroup = app.users.get(row.model.get('created_by'));
+                  if ( creatorGroup.table == undefined ) {
+                    blackedRows.push(row);
+                    return;
+                  }
+                  creatorGroup = creatorGroup.getGroup().get('id');
+                  let currentUserGroup = app.getCurrentGroup().get('id');
                   if ( creatorGroup != currentUserGroup ) {
                       blackedRows.push(row);
                   }
               } else if ( row.model.has('user_created') ) {
-                  var creatorGroup = app.users.get(row.model.get('user_created')).getGroup().get('id');
-                  var currentUserGroup = app.getCurrentGroup().get('id');
+                  let creatorGroup = app.users.get(row.model.get('user_created'));
+                  if ( creatorGroup.table == undefined ) {
+                      blackedRows.push(row);
+                      return;
+                  }
+                  creatorGroup = creatorGroup.getGroup().get('id');
+                  let currentUserGroup = app.getCurrentGroup().get('id');
                   if ( creatorGroup != currentUserGroup ) {
                       blackedRows.push(row);
                   }
               } else {
-                  Notification.error( 'Missing part!', 'I\'m unable to finish my work. I can\'t find \"Created by\" column. Please make sure that this column is enabled in options menu placed in top-right corner of your screen.');
+                  console.warn({
+                      title: 'Missing part!',
+                      message: 'I\'m unable to finish my work. I can\'t find "created_by" and "user_created" column. Please make sure that this column is enabled in options menu placed in top-right corner of your screen.'
+                  });
                   tableData.rows = [];
               }
 	      } );
