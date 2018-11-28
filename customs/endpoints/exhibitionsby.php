@@ -70,7 +70,7 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
     $config = Bootstrap::get('config');
     $fs = $config['filesystem'];
     $root_url = $fs['root_url'];
-    $root_ratios_url = $fs['root_ratios_url'];
+    $base_ratio_path = $fs['root'].'/ratios';
     
     // Array with all ratios to check
     $r = ['sixteen_nine', 'four_three', 'three_two', 'one_one', 'free'];
@@ -80,9 +80,14 @@ function addImagesDataIfExistTo($object, $filenameField = null) {
     
     for($j = 0; $j < count($r); $j++) {
         
-        $file = glob( $root_ratios_url.'/'.$r[ $j ].'/'.substr($name, 0, -4).'*' );
+        $path = $base_ratio_path.'/'.$r[ $j ].'/'.substr($name, 0, strrpos($name, ".")).'*';
+        
+        $file = glob( $path );
+        
+        $object[ $r[ $j ].'_url' ] = $object['url'];
+        
         foreach( $file as $filefound ) {
-            $object[ $r[ $j ].'_url' ] = str_replace( '/var/www/html', '', $filefound );
+            $object[ $r[ $j ].'_url' ] = preg_replace( '/(\/var\/www\/html\/)[a-z]{8}/', '', $filefound );
         }
         
     }
@@ -111,6 +116,7 @@ $app->get('/exhibitionsby', function () use ($app) {
     $debug = $app->request()->params('debug') || 0;
     $authorsonly = $app->request()->params('authorsonly') || 0;
     $exhibitsonly = $app->request()->params('exhibitsonly') || 0;
+    $status = $app->request()->params('status') ? $app->request()->params('status') : 0;
     
     debugAdd($exhibitsonly);
     
@@ -135,28 +141,31 @@ $app->get('/exhibitionsby', function () use ($app) {
                 array_push($relatedTablesIds, $data['id']);
                 
                 $entry = getExhibitionBy('id', $data['id']);
-                $tmp = [];
-                $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
-                $entry['image'] = $tmp;
                 
-                // Add Descriptions and Authors
-                if ($depth >= 1) {
-                    // Add Descriptions
-                    $translationsTable = getTableItems('exhibition_translations');
+                if ($entry['status'] == $status) {
                     $tmp = [];
-                    $tmp['data'] = filterBy($translationsTable, 'exhibition', $entry['id']);
-                    $entry['translations'] = $tmp;
+                    $tmp['data'] = addImagesDataIfExistTo(getFileBy('id', $entry['image']));
+                    $entry['image'] = $tmp;
                     
-                    // Add Authors
-                    $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
-                    $tmp = [];
-                    $tmp['data'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
-                    $entry['authors'] = $tmp;
+                    // Add Descriptions and Authors
+                    if ($depth >= 1) {
+                        // Add Descriptions
+                        $translationsTable = getTableItems('exhibition_translations');
+                        $tmp = [];
+                        $tmp['data'] = filterBy($translationsTable, 'exhibition', $entry['id']);
+                        $entry['translations'] = $tmp;
+                        
+                        // Add Authors
+                        $junctionAuthorsExhibitionsTable = getTableItems('junction_author_to_exhibition');
+                        $tmp = [];
+                        $tmp['data'] = getFilteredItems($junctionAuthorsExhibitionsTable, 'exhibition', $entry['id'], 'id', 'authors', $depth);
+                        $entry['authors'] = $tmp;
+                    }
+                    
+                    $entry['museum_id'] = $museum_id;
+                    
+                    array_push($relatedTables, $entry);
                 }
-                
-                $entry['museum_id'] = $museum_id;
-                
-                array_push($relatedTables, $entry);
             }
         }
     } else if ($exhibition_id && !$museum_id) {
